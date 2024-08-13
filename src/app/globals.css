@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -18,7 +19,7 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
+  background: (
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
@@ -29,5 +30,41 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+.background-container {
+  background-image: url('/liquid-cheese.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100vh; /* Full viewport height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+
+.globe-container {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+}
+
+.globe {
+  width: 100%;
+  height: 100%;
+  vertical-align: middle; 
+  animation: rotate 5s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(360deg);
   }
 }

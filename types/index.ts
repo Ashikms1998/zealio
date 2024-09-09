@@ -1,4 +1,5 @@
 import { MouseEventHandler } from "react";
+import { string } from "zod";
 
 export interface CustomButtonProps {
     title: string;
@@ -19,3 +20,32 @@ export interface CustomVideoCardProps {
     videoUrls:string[];
 }
 
+export interface FormData {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }
+
+  export interface LoginForm{
+    email:string;
+    password:string;
+  }
+
+export interface Custom3DCardProps{
+    imageUrl:string;
+    title:string;
+    description:string;
+}
+
+export interface verifyOTP{
+    verify_token:string;
+}
+export interface ForgotForm{
+    email:string
+}
+
+export interface rePassword{
+    password:string;
+}

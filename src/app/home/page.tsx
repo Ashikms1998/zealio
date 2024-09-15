@@ -6,9 +6,10 @@ import { Footer, Navbar } from '@/components';
 import { ThreeDCardDemo } from '@/components/3d-card';
 import { px } from 'framer-motion';
 import { cookies } from 'next/headers';
-
+import { useRouter } from 'next/navigation';
 const page = () => {
-
+  
+  const router = useRouter()
   // useEffect(() => {
   //   setMounted(true)
   //   document.body.classList.add("dark-scrollbar")
@@ -52,7 +53,7 @@ const page = () => {
       </div>
 
       <div className="flex justify-between">
-        <ThreeDCardDemo imageUrl='/89ef5d6451847480bf38a6ab147148c8.jpg' title='Study Solo' description='Create your very own study room with atmospheric backgrounds, personal timers, and goals.' />
+        <ThreeDCardDemo imageUrl='/89ef5d6451847480bf38a6ab147148c8.jpg' title='Study Solo' description='Create your very own study room with atmospheric backgrounds, personal timers, and goals.' onClick={() => router.push('/study/solo-study')} />
         <ThreeDCardDemo imageUrl='/4032818b7cf440741f35a9b290e3970c.jpg' title='Group Study Rooms' description='Join motivated students from all over the world to boost your productivity and find your study flow' />
         <ThreeDCardDemo imageUrl='/ac58471d76bba639b4a21280ecfd88a9.jpg' title='One on One room' description='If you have a friend you want to study with then create your on space here' />
       </div>

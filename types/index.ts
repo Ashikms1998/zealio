@@ -37,6 +37,7 @@ export interface Custom3DCardProps{
     imageUrl:string;
     title:string;
     description:string;
+    onClick?: () => void;
 }
 
 export interface verifyOTP{
@@ -48,4 +49,8 @@ export interface ForgotForm{
 
 export interface rePassword{
     password:string;
+}
+
+export interface spotifyToken{
+    token:string
 }

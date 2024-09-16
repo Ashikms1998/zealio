@@ -10,7 +10,6 @@ const url = process.env.NEXT_PUBLIC_API_URL;
 const MusicPlayer = () => {
     const currentAudio = useRef<HTMLAudioElement | null>(null);
     const [isAudioPlaying, setIsAudioPlaying] = useState(false);
-    const [videoIndex, setVideoIndex] = useState(0)
     const [musicTotalLength, setMusicTotalLength] = useState('04 : 38');
     const [musicCurrentTime, setMusicCurrentTime] = useState('00 : 00');
     const [audioProgress, setAudioProgress] = useState(0);
@@ -120,21 +119,7 @@ const MusicPlayer = () => {
 
     }
 
-    const vidArray = [
-        "/backgroundVideos/foggy-forest.3840x2160.mp4",
-        "/backgroundVideos/video1.mp4",
-        "/backgroundVideos/Winter Forest Snow Live Wallpaper.mp4",
-    ];
 
-
-
-    const handleChangeBackground = () => {
-        if (videoIndex >= vidArray.length - 1) {
-            setVideoIndex(0);
-        } else {
-            setVideoIndex(videoIndex + 1)
-        }
-    }
     const containerStyle = {
         minHeight: "100vh",
         minWidth: "100vw",
@@ -147,31 +132,6 @@ const MusicPlayer = () => {
 
 
 
-
-    const backgroundVideoStyle = {
-        position: "absolute" as "absolute",
-        right: 0,
-        top: 0,
-        width: "100%",
-        objectFit: "cover" as "cover",
-        height: "100vh",
-        zIndex: -1,
-        filter: "saturate(2.5)",
-    };
-
-    const changeBackBtnStyle = {
-        cursor: "pointer",
-        padding: "10px 20px",
-        background: "#fff",
-        borderRadius: "5px",
-        fontWeight: "bold",
-        marginTop: "40px",
-        position: "fixed" as "fixed",
-        bottom: "-10px",
-        left: "50%",
-        transform: "translateX(-50%)"
-
-    };
     const musicContainer = {
         width: "300px",
         padding: "20px 40px",
@@ -239,13 +199,7 @@ const MusicPlayer = () => {
     return (
         <>
             <div style={containerStyle}>
-                <video
-                    src={vidArray[videoIndex]}
-                    loop
-                    muted
-                    autoPlay
-                    style={backgroundVideoStyle}
-                ></video>
+
                 <div>
 
                     <div style={musicContainer}>
@@ -266,9 +220,7 @@ const MusicPlayer = () => {
                         </div>
                     </div>
                 </div>
-                <div style={changeBackBtnStyle} onClick={handleChangeBackground}>
-                    Change Background
-                </div>
+
             </div>
         </>
     );

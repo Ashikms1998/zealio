@@ -51,10 +51,6 @@ export interface rePassword{
     password:string;
 }
 
-export interface spotifyToken{
-    token:string
-}
-
 
 export interface SettingsContextType {
     workMinutes: number;
@@ -62,4 +58,10 @@ export interface SettingsContextType {
     setWorkMinutes: (minutes: number) => void;
     setBreakMinutes: (minutes: number) => void;
     setShowSettings: (show: boolean) => void;
+  }
+
+export interface DecodedToken {
+    userId: string;
+    iat: number;
+    exp: number;
   }

@@ -1,39 +1,88 @@
-import React, { useContext } from "react";
-import ReactSlider from 'react-slider';
-import './slider.css'
-import SettingsContext from "./SettingsContext";
-import BackButton from "./BackButton";
+import React, { useCallback, useEffect, useState } from 'react';
+import Create from './Create';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
+import { DecodedToken } from '../../../types';
 
-function Settings() {
-  const settingsInfo = useContext(SettingsContext);
+const url = process.env.NEXT_PUBLIC_API_URL as string;
 
-  return(
-    <div style={{textAlign:'left'}}>
-      <label>work: {settingsInfo.workMinutes}:00</label>
-      <ReactSlider
-        className={'slider'}
-        thumbClassName={'thumb'}
-        trackClassName={'track'}
-        value={settingsInfo.workMinutes}
-        onChange={newValue => settingsInfo.setWorkMinutes(newValue)}
-        min={1}
-        max={120}
-      />
-      <label>break: {settingsInfo.breakMinutes}:00</label>
-      <ReactSlider
-        className={'slider green'}
-        thumbClassName={'thumb'}
-        trackClassName={'track'}
-        value={settingsInfo.breakMinutes}
-        onChange={newValue => settingsInfo.setBreakMinutes(newValue)}
-        min={1}
-        max={120}
-      />
-      <div style={{textAlign:'center', marginTop:'20px'}}>
-        <BackButton onClick={() => settingsInfo.setShowSettings(false)} />
-      </div>
-    </div>
-  );
+const Todo = () => {
+    const todoContainer = {
+        position: "fixed" as "fixed",
+        top: "50%",
+        left: "12%",
+        transform: "translate(-50%, -50%)",
+        width: "350px",
+        padding: "35px 40px",
+        display: "flex",
+        flexDirection: "column" as "column",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center" as "center",
+        borderRadius: "15px",
+        boxShadow: "0 0 20px rgba(26, 26, 26, 0.1), 0 0 40px rgba(26, 26, 26, 0.1), 0 0 80px rgba(26, 26, 26, 0.1)",
+        backdropFilter: "blur(15px)",
+        fontWeight: "600",
+        zIndex: 2,
+    };
+
+    const [todos, setTodos] = useState<any[]>([]);
+    const [accessToken, setAccessToken] = useState<string | null>(null);
+    const [userId, setUserId] = useState<string | null>(null);
+
+    const decodeToken = useCallback(() => {
+        const token = Cookies.get('accessToken');
+        if (token) {
+            setAccessToken(token);
+            try {
+                const decoded = jwtDecode(token) as DecodedToken;
+                setUserId(decoded.userId);
+            } catch (error) {
+                console.error('Error decoding token:', error);
+                Cookies.remove('accessToken');
+                setAccessToken(null);
+                setUserId(null);
+            }
+        } else {
+            console.log('No access token found');
+        }
+    }, []);
+
+    useEffect(() => {
+        decodeToken();
+    }, [decodeToken]);
+
+    useEffect(() => {
+        if (userId) {
+            console.log(userId, "userId updated");
+        }
+    }, [userId]);
+
+    useEffect(() => {
+        if (!accessToken || !userId) {
+            console.error('No access token or userId available. Please login again.');
+            return;
+        }
+        axios.get(`${url}/auth/fetchTodo?userId=${userId}`)
+            .then(result => setTodos(result.data))
+            .catch(error => console.log(error))
+    }, [accessToken, userId]);
+
+    return (
+        <div style={todoContainer}>
+            <h2>Todo Lists</h2>
+            {todos.length === 0 ? (
+                <p>No Record</p>
+            ) : (
+                todos.map((todo, index) => (
+                    <div key={index}>
+                        {todo.task}
+                    </div>
+                ))
+            )}
+        </div>
+    );
 }
 
-export default Settings;
+export default Todo;

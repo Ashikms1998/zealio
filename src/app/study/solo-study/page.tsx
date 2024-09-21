@@ -4,6 +4,7 @@ import { Navbar } from "@/components";
 import MusicPlayer from "@/components/MusicPlayer";
 import PomodoroTimer from "@/components/TimerComponents/PomodoroTimer";
 import ChangingBackground from "@/components/ChangingBackground";
+import Todo from "@/components/TodoComponent/Todo";
 const url = process.env.NEXT_PUBLIC_API_URL;
 
 
@@ -18,6 +19,7 @@ const ShootingStarsAndStarsBackgroundDemo = () => {
       <ChangingBackground/>
       <MusicPlayer />
       <PomodoroTimer/>
+      <Todo/>
     </>
   );
 };

@@ -65,12 +65,12 @@ function Timer() {
     return (
         <div>
             <CircularProgressbar
-                value={percentage }
+                value={percentage}
                 text={minutes + ':' + seconds}
                 styles={buildStyles({
                     textColor: '#fff',
                     pathColor: mode === 'Work' ? red : green,
-                    trailColor:'rgba(255,255,255,.2)',
+                    trailColor: 'rgba(255,255,255,.2)',
 
                 })}
             />
@@ -79,7 +79,7 @@ function Timer() {
                     ? <PlayButton onClick={() => { setIsPaused(false); isPausedRef.current = false; }} />
                     : <PauseButton onClick={() => { setIsPaused(true); isPausedRef.current = true; }} />}
             </div>
-            <div style={{ marginTop: '20px' }}>
+            <div style={{ marginTop: '20px', display: "flex", justifyContent: "center"}}>
                 <SettingsButton onClick={() => settingsInfo.setShowSettings(true)} />
             </div>
         </div>

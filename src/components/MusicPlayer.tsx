@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { Navbar } from "@/components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBackward, faPauseCircle, faForward, faCirclePlay } from '@fortawesome/free-solid-svg-icons';
 const url = process.env.NEXT_PUBLIC_API_URL;
@@ -152,11 +151,11 @@ const MusicPlayer = () => {
         fontSize: "1rem",
         textAlign: "center" as "center",
     };
-    const musicPlayer = {
-        margin: "0",
-        marginBottom: "10px",
-        color: "var(--mainLightColor)"
-    }
+    // const musicPlayer = {
+    //     margin: "0",
+    //     marginBottom: "10px",
+    //     color: "var(--mainLightColor)"
+    // }
 
     const musicArtistName = {
         color: "var(--mainDimColor)",

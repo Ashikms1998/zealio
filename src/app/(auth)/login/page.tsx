@@ -41,6 +41,8 @@ const page = () => {
         withCredentials: true,
       })
       if (response) {
+        const { accessToken } = response.data;
+        localStorage.setItem('accessToken', accessToken);
         toast.success("login successfull", {
           position: "top-center",
         })

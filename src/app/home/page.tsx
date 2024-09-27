@@ -58,6 +58,8 @@ const page = () => {
         <ThreeDCardDemo imageUrl='/ac58471d76bba639b4a21280ecfd88a9.jpg' title='One on One room' description='If you have a friend you want to study with then create your on space here' />
       </div>
 
+      <button onClick={()=>router.push('/study/youtube')}>YouTube</button>
+
       <div className='flex justify-center items-center text-center text-4xl'>
         Why join a Focus Room?<br />
       </div>

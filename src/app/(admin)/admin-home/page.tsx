@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { User } from '../../../../types/User';
 import axios from 'axios';
+import { BsTrash } from 'react-icons/bs';
+import Modal from '@/components/Modal'
 const url = process.env.NEXT_PUBLIC_API_URL as string;
 
 
@@ -10,6 +12,8 @@ const page = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false)
+  const [open, setOpen] = useState(false)
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -42,21 +46,30 @@ const page = () => {
 
   }, [searchTerm]);
 
-  const toggleBlockUser = async (userId: string,isBlocked:boolean) => {
+
+
+
+  const toggleBlockUser = async (userId: string, isBlocked: boolean) => {
     try {
-      const response = await axios.put(`${url}/auth/users/block-unblock`,{ userId, isBlocked: !isBlocked });
-      
+      console.log(userId,isBlocked,"triggered item");
+      const response = await axios.put(`${url}/auth/users/block-unblock`, { userId, isBlocked: !isBlocked });
+      console.log(response,'response here');
       const updatedUser = response.data.data;
 
-      setUsers((prevUsers)=>
-        prevUsers.map((user)=>
-          user.id === updatedUser.id ? updatedUser:user
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === updatedUser.id ? updatedUser : user
         )
       )
 
     } catch (error) {
       console.error('Error blocking/unblocking user', error);
     }
+  }
+
+  const handleBlockClick = (userId: string, isBlocked: boolean) => {
+    setSelectedUserId(userId);
+    setOpen(true);
   }
 
 
@@ -106,15 +119,16 @@ const page = () => {
                   {user.email}
                 </td>
                 <td className="w-1/4 py-4 px-6 text-center text-gray-800">
-                {user.isBlocked ? 'Blocked' : 'Active'}</td>
+                  {user.isBlocked ? 'Blocked' : 'Active'}</td>
                 <td className="w-1/4 py-4 px-6 text-center text-gray-800">
                   <button
-                    onClick={() => toggleBlockUser(user.id,user.isBlocked)}
-                    className={`py-2 px-4 ${user.isBlocked ? 'bg-green-500' : 'bg-red-500'
-                      } text-white`}
+                    onClick={() => handleBlockClick(user.id, user.isBlocked)}
+                    className={`py-2 px-4 ${user.isBlocked ? 'bg-green-500' : 'bg-red-500'} text-white`}
                   >
                     {user.isBlocked ? 'Unblock' : 'Block'}
                   </button>
+
+
                 </td>
               </tr>
 
@@ -123,6 +137,40 @@ const page = () => {
           </tbody>
         </table>
       </div>
+
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <div className="text-center w-56">
+          <BsTrash size={56} className="mx-auto text-red-500" />
+          <div className="mx-auto my-4 w-48">
+            <h3 className="text-lg font-black text-gray-800">Confirm Action</h3>
+            <p className="text-sm text-gray-500">
+              Are you sure you want to {users.find(u => u.id === selectedUserId)?.isBlocked ? 'unblock' : 'block'} this user?
+            </p>
+          </div>
+          <div className="flex gap-4">
+            <button
+              className="btn btn-danger w-full"
+              onClick={() => {
+                const user = users.find(u => u.id === selectedUserId);
+                if (user) {
+                  toggleBlockUser(user.id, user.isBlocked);
+                  setOpen(false);
+                }
+              }}
+            >
+              Confirm
+            </button>
+            <button
+              className="btn btn-light w-full"
+              onClick={() => setOpen(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+
     </div>
   );
 }

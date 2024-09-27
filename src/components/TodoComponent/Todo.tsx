@@ -147,9 +147,11 @@ const Todo = () => {
             alert('An unexpected error occurred. Please try again.');
         }
     }
+    
 
 
     return (
+
         <div style={todoContainer}>
             <h2>Todo Lists</h2>
             <Create updatedTask={(newTask) => setTodos((prev) => [...prev, newTask])} />
@@ -178,6 +180,8 @@ const Todo = () => {
                     )}
             </div>
         </div>
+        
+
     )
 }
 

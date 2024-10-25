@@ -8,7 +8,7 @@ import Modal from '@/components/Modal'
 const url = process.env.NEXT_PUBLIC_API_URL as string;
 
 
-const page = () => {
+const Page = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false)
@@ -175,4 +175,4 @@ const page = () => {
   );
 }
 
-export default page
+export default Page

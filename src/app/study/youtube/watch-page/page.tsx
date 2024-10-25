@@ -4,7 +4,7 @@ import React from 'react'
 import Header from '../header/Header';
 import { SearchProvider } from '../search-context/SearchContext';
 
-const page = () => {
+const Page = () => {
 
   const searchParams = useSearchParams();
   const videoId = searchParams.get("v");
@@ -30,4 +30,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

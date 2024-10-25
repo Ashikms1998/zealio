@@ -1,3 +1,4 @@
+'use client'
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { AiOutlineSearch } from "react-icons/ai"
 import './_header.scss';

@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { rePassword } from "../../../../types";
 const url = process.env.NEXT_PUBLIC_API_URL as string;
-const page = () => {
+const Page = () => {
     const router = useRouter()
     const [data, setData] = useState<rePassword>({
         password:""
@@ -93,4 +93,4 @@ const page = () => {
         </div>
     )
 }
-export default page;
+export default Page;

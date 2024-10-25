@@ -19,7 +19,7 @@ import { userDetailsStore } from "@/zustand/userAuth";
 
 const url = process.env.NEXT_PUBLIC_API_URL as string;
 
-const page = () => {
+const Page = () => {
 
   const router = useRouter()
 
@@ -71,7 +71,7 @@ const page = () => {
           Welcome back to Zealio.
         </h2>
         <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300 text-center">
-          Login let's Grind together.
+          Login let&apos;s Grind together.
         </p>
 
         <form className="my-8" onSubmit={handleSubmit}>
@@ -156,7 +156,7 @@ const LabelInputContainer = ({
   );
 };
 
-export default page
+export default Page
 
 
 

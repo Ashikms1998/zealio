@@ -4,7 +4,6 @@ import { Inter } from 'next/font/google'
 import Globe from '../public/reshot-icon-earth-5CZANT74JX.svg'
 import CustomCard from "./CustomCard"
 import CustomVideoCard from "./CustomVideoCard"
-// import { fetchData } from "../api/index"
 import { useEffect, useState } from "react"
 const inter = Inter({
     weight: '900',
@@ -21,7 +20,7 @@ const Hero = () => {
 
                 <p className={`${inter.className} text-[48px] text-center`}>
                     Hard Work Beats Talent <br />
-                    When Talent Doesn't<br />
+                    When Talent Doesn&apos;t<br />
                     Work Hard
                 </p>
 
@@ -51,13 +50,13 @@ const Hero = () => {
                 />
                 <CustomCard
                     title="Group Study Rooms"
-                    description="Join motivated students from all over the world to boost your productivity and find your study flow"
+                    description="Join motivated students from all over the world to boost your productivity and find your study flow"
                     imageUrl="/4032818b7cf440741f35a9b290e3970c.jpg"
 
                 />
                 <CustomCard
                     title="Study Stats"
-                    description="See your progress every day in your Stats and on the community leaderboard."
+                    description="See your progress every day in your Stats and on the community leaderboard."
                     imageUrl="/349ffdac815e56b56476ac92b42e075d.jpg"
 
                 />

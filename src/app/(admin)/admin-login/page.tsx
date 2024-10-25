@@ -15,7 +15,7 @@ import { LoginForm } from "../../../../types";
 
 const url = process.env.NEXT_PUBLIC_API_URL as string;
 
-const page = () => {
+const Page = () => {
 
     const router = useRouter()
 
@@ -115,7 +115,7 @@ const LabelInputContainer = ({
     );
 };
 
-export default page
+export default Page
 
 
 

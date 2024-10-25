@@ -7,7 +7,7 @@ import axios from 'axios';
 import { toast, Toaster } from 'sonner';
 import { useRouter } from 'next/navigation';
 const url = process.env.NEXT_PUBLIC_API_URL as string;
-const page = () => {
+const Page = () => {
     const router = useRouter()
     const [data, setData] = useState<verifyOTP>({
         verify_token:""
@@ -177,4 +177,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page

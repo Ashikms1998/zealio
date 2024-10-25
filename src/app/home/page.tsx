@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { userDetailsStore } from '@/zustand/userAuth';
 
-const page = () => {
+const Page = () => {
   const token = Cookies.get('accessToken');
   console.log(token,"This is the access token")
   const {login} = userDetailsStore();
@@ -82,4 +82,4 @@ const page = () => {
   );
 }
 
-export default page
+export default Page

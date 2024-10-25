@@ -1,6 +1,6 @@
 'use client'
 import { useSearchParams } from 'next/navigation';
-import React from 'react'
+import React, { Suspense } from 'react'
 import Header from '../header/Header';
 import { SearchProvider } from '../search-context/SearchContext';
 
@@ -30,4 +30,14 @@ const Page = () => {
   )
 }
 
-export default Page
+
+
+const VideoWatchPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Page />
+    </Suspense>
+  );
+};
+
+export default VideoWatchPage;

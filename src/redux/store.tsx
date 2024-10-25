@@ -10,6 +10,9 @@ const userSlice = createSlice({
     reducers:{
         updateName:(state,action)=>{
             state.age = action.payload;
+        },
+        updateAge: (state, action) => {
+            state.age = action.payload;
         }
     }
 });

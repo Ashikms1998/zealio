@@ -1,33 +1,49 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { createSlice } from '@reduxjs/toolkit';
+'use client'
+import axios from "axios";
+import { useEffect, useState, useCallback } from "react";
+import { toast } from "sonner";
 
-// Create a slice for the user data
-const userSlice = createSlice({
-  name: 'user',
-  initialState: {
-    name: "Ashik",
-    age: "26"
-  },
-  reducers: {
-    // You can add reducer functions here to update the state
-    updateName: (state, action) => {
-      state.name = action.payload;
-    },
-    updateAge: (state, action) => {
-      state.age = action.payload;
+const url = process.env.NEXT_PUBLIC_API_URL as string;
+
+// Define a type for your conversation data
+type Conversation = {
+  // Add properties based on your actual data structure
+  id: string;
+  // ... other properties
+};
+
+const useGetConversations = () => {
+  const [loading, setLoading] = useState(false);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+
+  const getConversations = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post<{ data: Conversation[] }>(`${url}/chat/userLog`);
+      console.log(response, "users vanne");
+      const data = response.data;
+      if ('error' in data) {
+        throw new Error(data.error);
+      }
+      setConversations(data.data); // Assuming the conversations are in data.data
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "An error occurred while fetching conversations");
+      } else {
+        toast.error("An unexpected error occurred");
+      }
+      console.error("Error fetching conversations:", error);
+    } finally {
+      setLoading(false);
     }
-  }
-});
+  }, []);
 
-// Export the actions
-export const { updateName, updateAge } = userSlice.actions;
+  useEffect(() => {
+    console.log("keranond bro");
+    getConversations();
+  }, [getConversations]);
 
-// Create and export the store
-const store = configureStore({
-  reducer: {
-    user: userSlice.reducer
-  },
-  // The middleware option has been removed as it's not needed for this basic setup
-});
+  return { loading, conversations };
+};
 
-export default store;
+export default useGetConversations;

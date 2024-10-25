@@ -9,6 +9,8 @@ import SettingsContext from "./SettingsContext";
 const red = '#32aab3';
 const green = '#4aec8c';
 
+const notificationSound = new Audio('/songs/Notificationding.mp3');
+
 function Timer() {
     const settingsInfo = useContext(SettingsContext);
     const [isPaused, setIsPaused] = useState<boolean>(true);
@@ -28,6 +30,8 @@ function Timer() {
         function switchMode() {
             const nextMode = modeRef.current === 'Work' ? 'Break' : 'Work';
             const nextSeconds = (nextMode === 'Work' ? settingsInfo.workMinutes : settingsInfo.breakMinutes) * 60;
+
+            notificationSound.play();
 
             setMode(nextMode);
             modeRef.current = nextMode;

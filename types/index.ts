@@ -65,3 +65,56 @@ export interface DecodedToken {
     iat: number;
     exp: number;
   }
+
+  export interface YouTubeVideo {
+
+    id: {
+        videoId: string;
+      };
+
+    snippet: {
+        title: string;
+        description: string;
+        thumbnails: {
+            default: {
+                url: string;
+            };
+        };
+    };
+}
+
+export interface YouTubeResponse {
+    items: YouTubeVideo[];
+}
+
+export interface ConversationType {
+    id: string;
+    _id?: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+}
+
+export interface MessageType {
+    _id: string;
+    content:string;
+  }
+
+ export interface MessageTypes {
+    _id: string;
+    senderId: string;
+    receiverId: string;
+    message: string;
+    createdAt: string;
+    updatedAt: string;
+  }
+
+
+  export interface MessagesResponse {
+    _id: string;
+    participants: string[];
+    messages: MessageType[];
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  }

@@ -38,7 +38,7 @@ const Todo = () => {
         backgroundColor: "rgba(26, 26, 26, 0.4)",
         color: "white",
         height: "35px",
-        padding: "2px 5px 2px 5px",
+        padding: "2px 5px 2px 15px",
         marginTop: "2px",
         borderRadius: "10px"
     };
@@ -50,6 +50,7 @@ const Todo = () => {
 
     const checkboxIcons = {
         marginRight: "5px",
+        marginTop: "2px",
         fontSize: "15px",
         cursor: "pointer"
     };
@@ -104,21 +105,25 @@ const Todo = () => {
     const handleDone = async (taskId: string, userId: string) => {
         try {
 
-            setTodos(prevTodos =>
-                prevTodos.map(todo =>
+            setTodos(prevTodos =>{
+                const updatedTodos = prevTodos.map(todo =>
                     todo._id === taskId ? { ...todo, completed: !todo.completed } : todo
                 )
-            );
+            updatedTodos.sort((a, b) => a.completed - b.completed);
+            
+            return updatedTodos;
+
+        });
 
             const response = await axios.put(`${url}/auth/updateTaskCompleation?_id=${taskId}&userId=${userId}`)
-            if (response.status !=200) {
+            if (response.status != 200) {
                 setTodos(prevTodos =>
                     prevTodos.map(todo =>
                         todo._id === taskId ? { ...todo, completed: !todo.completed } : todo
                     )
                 );
                 alert('Something went wrong while striking the task. Please try again.');
-            } 
+            }
         } catch (error) {
             setTodos(prevTodos =>
                 prevTodos.map(todo =>
@@ -147,14 +152,14 @@ const Todo = () => {
             alert('An unexpected error occurred. Please try again.');
         }
     }
-    
+
 
 
     return (
 
         <div style={todoContainer}>
             <h2>Todo Lists</h2>
-            <Create updatedTask={(newTask) => setTodos((prev) => [...prev, newTask])} />
+            <Create updatedTask={(newTask) => setTodos((prev) => [ newTask,...prev])} />
             <br />
             <div className='todo-scrollbar max-h-56 overflow-hidden overflow-y-scroll' >
                 {
@@ -167,10 +172,10 @@ const Todo = () => {
                                     <div style={checkbox} onClick={() => handleDone(todo._id, todo.userId)}>
                                         {todo.completed ?
                                             <BsFillCheckCircleFill style={checkboxIcons} />
-                                            : 
-                                        <BsCircleFill style={checkboxIcons} />
-                                    }
-                                        <p className={todo.completed ? "line-through text-slate-400" : "" }>{todo.task}</p>
+                                            :
+                                            <BsCircleFill style={checkboxIcons} />
+                                        }
+                                        <p className={todo.completed ? "line-through text-slate-400" : ""}>{todo.task}</p>
                                     </div>
                                     <span><BsFillTrashFill style={checkboxIcons} onClick={() => handleDelete(todo._id, todo.userId)} /></span>
                                 </div>
@@ -180,7 +185,7 @@ const Todo = () => {
                     )}
             </div>
         </div>
-        
+
 
     )
 }

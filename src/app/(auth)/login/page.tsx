@@ -14,6 +14,8 @@ import { date } from "zod";
 import { useRouter } from "next/navigation";
 import { LoginForm } from "../../../../types";
 import SignInWithGoogleButton from "@/components/ui/auth/signIn-google";
+import { login } from "@/redux/actions/auth.action";
+import { userDetailsStore } from "@/zustand/userAuth";
 
 const url = process.env.NEXT_PUBLIC_API_URL as string;
 
@@ -27,7 +29,7 @@ const page = () => {
   });
   const [errors, setErrors] = useState<Partial<Record<keyof LoginForm, string>>>({});
   const [showPassword, setShowPassword] = useState(false);
-
+  const {login} = userDetailsStore()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { currentTarget: input } = e;
@@ -40,8 +42,10 @@ const page = () => {
       const response = await axios.post(`${url}/auth/login`, data, {
         withCredentials: true,
       })
+      
       if (response) {
         const { accessToken } = response.data;
+        login(response.data.accessToken)
         localStorage.setItem('accessToken', accessToken);
         toast.success("login successfull", {
           position: "top-center",

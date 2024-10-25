@@ -4,6 +4,7 @@ import React, { MouseEvent, useEffect, useState, useCallback, useRef } from 'rea
 const url = process.env.NEXT_PUBLIC_API_URL as string;
 import { jwtDecode } from 'jwt-decode';
 import { DecodedToken } from '../../../types';
+import { toast } from 'sonner';
 
 function Create({ updatedTask }: { updatedTask: (task:any)=>void}) {
 
@@ -60,23 +61,29 @@ function Create({ updatedTask }: { updatedTask: (task:any)=>void}) {
         }
 
         try {
-    
-            const response = await axios.post(`${url}/auth/addtask`, { task: task, userId: userId });
 
-            if (response.status === 201) { 
+            const response = await axios.post(`${url}/auth/addtask`, { task: task, userId: userId }, { withCredentials: true });
+
+            if (response.status === 201) {
                 const newTask = response.data;
                 updatedTask(newTask)
                 setTask('');
-              
+            } else if (response.status === 409) {
+
+                toast.error('Task already exists. Please add a different task.');
             } else {
 
                 console.error('Unexpected response from the server:', response);
                 alert('Something went wrong while adding the task. Please try again.');
             }
 
-        } catch (error) {
-            console.error('Unexpected error:', error);
-            alert('An unexpected error occurred. Please try again.');
+        } catch (error: any) {
+            if (error.response && error.response.status === 409) {
+                toast.error('Task already exists. Please add a different task.');
+            } else {
+                console.error('Unexpected error:', error);
+                alert('An unexpected error occurred. Please try again.');
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 "use client";
 import Link from 'next/link'
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation';
 import { verifyOTP } from '../../../../types';
 import axios from 'axios';
@@ -177,4 +177,13 @@ const Page = () => {
     )
 }
 
-export default Page
+
+const OtpPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Page />
+    </Suspense>
+  );
+};
+
+export default OtpPage;

@@ -12,14 +12,13 @@ import { userDetailsStore } from '@/zustand/userAuth';
 
 const Page = () => {
   const token = Cookies.get('accessToken');
-  console.log(token,"This is the access token")
-  const {login} = userDetailsStore();
+  const { login } = userDetailsStore();
   const router = useRouter();
 
   useEffect(() => {
     if (token) {
       login(token)
-    }else{
+    } else {
       //Logout function here
     }
   }, [])
@@ -62,9 +61,6 @@ const Page = () => {
         <ThreeDCardDemo imageUrl='/ac58471d76bba639b4a21280ecfd88a9.jpg' title='One on One room' description='If you have a friend you want to study with then create your on space here.' onClick={() => router.push('/study/zealio-chat')} />
       </div>
 
-      <div className="flex justify-center items-center">
-        <button className="flex justify-center items-center bg-blue-500 text-white font-semibold py-2 px-4 rounded shadow hover:bg-blue-600 transition duration-200" onClick={() => router.push('/study/youtube')}>YouTube</button>
-      </div>
       <div className='flex justify-center items-center text-center text-4xl'>
         Why join a Focus Room?<br />
       </div>

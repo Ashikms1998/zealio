@@ -1,8 +1,10 @@
 'use client'
 import { userDetailsStore } from "@/zustand/userAuth";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 const url = process.env.NEXT_PUBLIC_API_URL;
 import { io, Socket } from "socket.io-client"
+import { OnGoingCall } from "../../types/SocketTypes";
+import useConversation from "@/zustand/useConversation";
 
 
 const SocketContext = createContext<Socket | null>(null);
@@ -12,11 +14,13 @@ export const useSocketContext = () => {
 }
 
 export const SocketContextProvider = ({ children }: { children: React.ReactNode }) => {
-    // const [socket, setSocket] = useState<Socket | null>(null);
-    const [onlineUsers, setOnlineUsers] = useState([]);
+    const [isSocket, setIsSetSocket] = useState<Socket | null>(null);
+    // const [onlineUsers, setOnlineUsers] = useState([]);
     const user = userDetailsStore((state) => state.user?.id)
-    const {socket,setSocket} = userDetailsStore()
-
+    const { socket, setSocket } = userDetailsStore()
+    const [ongoingCall, setOngoingCall] = useState<OnGoingCall | null>(null)
+    const receiverId = useConversation((state)=>state.selectedConversation?.id);
+    // const socket = userDetailsStore((state) => state.socket);
     useEffect(() => {
         if (user) {
             const socket = io(process.env.NEXT_PUBLIC_API_URL, {
@@ -24,22 +28,14 @@ export const SocketContextProvider = ({ children }: { children: React.ReactNode 
                     userId: user
                 }
             });
-            console.log("This is socket👌", socket);
+            console.log("This is socket👌", socket, "This is userId😊", user);
             setSocket(socket);
-            // socket.on("getOnlineUsers", (users) => {
-            //     setOnlineUsers(users)
-            // })
-
             return () => socket.close();
         } else {
-            // if(socket){
-            //     socket.close();
-            //     setSocket(null)
-            // }
             if (socket)
                 return () => {
                     socket.close();
-                setSocket(null)
+                    setSocket(null)
 
                 };
         }

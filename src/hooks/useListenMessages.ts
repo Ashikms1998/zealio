@@ -5,12 +5,11 @@ import Notificationding from "../../public/songs/Notificationding.mp3";
 import { userDetailsStore } from "@/zustand/userAuth";
 
 const useListenMessages = () => {
-  const {socket} = userDetailsStore()
+  const {socket} = userDetailsStore();
   const { messages, setMessages } = useConversation();
 
   useEffect(() => {
     if (socket) {
-
       socket.on("newMessage", (newMessage: any) => {
         
         const notificationSound = new Audio(Notificationding);

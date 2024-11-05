@@ -1,11 +1,13 @@
 import axios from "axios";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Socket } from "socket.io-client";
+import { io,Socket } from "socket.io-client";
 const url = process.env.NEXT_PUBLIC_API_URL;
 
 interface userDetails {
   id: string;
+  firstName: string;
+  lastName: string;
 }
 
 interface AuthState {
@@ -16,6 +18,7 @@ interface AuthState {
   login: (accessToken: string) => Promise<void>;
   logout: () => void;
   setSocket: (socket: Socket | null) => void;
+  connectSocket: (userId: string) => void;
 }
 
 export const userDetailsStore = create<AuthState>()(
@@ -25,6 +28,42 @@ export const userDetailsStore = create<AuthState>()(
       isAuthenticated: false,
       user: null,
       socket: null,
+
+      //
+
+      // setSocket: (socket: Socket | null) => {
+      //   set({ socket });
+      // },
+      connectSocket: (userId: string) => {
+        const existingSocket = get().socket;
+        if (existingSocket) {
+          console.log("Socket already exists");
+          return;
+        }
+
+        const newSocket = io(process.env.NEXT_PUBLIC_API_URL, {
+          query: { userId },
+        });
+
+        newSocket.on("connect", () => {
+          set({ socket: newSocket });
+          console.log("Socket connected successfully",newSocket,);
+          
+        });
+
+        newSocket.on("error", (err) => {
+          console.error("Socket connection error:", err);
+          set({ socket: null });
+        });
+
+        newSocket.on("disconnect", () => {
+          console.log("Socket disconnected");
+          set({ socket: null });
+        });
+      },
+
+      //
+
       login: async (accessToken) => {
         try {
           set({ accessToken, isAuthenticated: true });
@@ -33,29 +72,39 @@ export const userDetailsStore = create<AuthState>()(
             { withCredentials: true }
           );
           const userData = response.data;
-
           set({
             user: {
               id: userData.id,
+              firstName: userData.firstName,
+              lastName: userData.lastName,
             },
           });
+          get().connectSocket(userData.id);
         } catch (error) {
           console.log("Failed to fetch user data:", error);
           set({
             accessToken: null,
             isAuthenticated: false,
             user: null,
+            socket: null
           });
         }
       },
       logout: () => {
+        const socket = get().socket;
+        if (socket) {
+          socket.disconnect();
+          console.log("Socket disconnected during logout");
+        }
         set({
           accessToken: null,
           isAuthenticated: false,
           user: null,
+       socket: null
         });
       },
       setSocket: (socket: Socket | null) => {
+        console.log(socket, "This is socket from user");
         set({ socket });
       },
     }),

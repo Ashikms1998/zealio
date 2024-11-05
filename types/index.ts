@@ -1,5 +1,5 @@
 import { MouseEventHandler } from "react";
-import { string } from "zod";
+import { boolean, string } from "zod";
 
 export interface CustomButtonProps {
     title: string;
@@ -93,6 +93,10 @@ export interface ConversationType {
     firstName: string;
     lastName: string;
     email: string;
+    isBlocked:boolean,
+    password:string
+    verified:boolean,
+    verify_token: string
 }
 
 export interface MessageType {

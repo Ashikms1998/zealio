@@ -5,19 +5,24 @@ import { userDetailsStore } from "@/zustand/userAuth";
 import { useEffect, useState } from "react";
 
 export default function SocketInitializer() {
-  const socket = userDetailsStore((state) => state.socket);
-  const initializeSocket = useSocketStore((state) => state.initializeSocket);
-  const [isInitialized, setIsInitialized] = useState(false);
+  // const socket = userDetailsStore((state) => state.socket);
+  // console.log(socket, "🤫")
+  // const initializeSocket = useSocketStore((state) => state.initializeSocket);
+  // console.log("🥳🥸", initializeSocket)
+  // const [isInitialized, setIsInitialized] = useState(false);
+
+  const {initializeSocket, socket} = useSocketStore()
 
   useEffect(() => {
 
-    if (!socket && !isInitialized) {
+    if (!socket ) {
       initializeSocket();
-      setIsInitialized(true);
     }
 
     return () => {
-      socket?.disconnect();
+      if (socket) {
+        socket?.disconnect();
+      }
     };
   }, [socket, initializeSocket]);
 

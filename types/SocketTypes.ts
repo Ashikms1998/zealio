@@ -33,9 +33,9 @@ export type OnGoingCall = {
  }
 
  export interface PeerData {
-    peerConnection: Peer.Instance
-    stream: MediaStream | undefined
-    participantUser: User
+    peerConnection?: Peer.Instance
+    stream?: MediaStream | undefined
+    participantUser?: User
   }
 
 export interface IVideoCall {

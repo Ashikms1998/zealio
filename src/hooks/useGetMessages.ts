@@ -54,6 +54,7 @@ const useGetMessages = () => {
           `${url}/chat/${selectedConversation?.id}`,
         {
           params: {
+            withCredentials: true,
             userId: userId,
           },
         }

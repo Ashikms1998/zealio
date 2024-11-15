@@ -48,7 +48,7 @@ const useSendMessage = () => {
     try {
       const response = await axios.post(
         `${url}/chat/send/${selectedConversation.id}`,
-        { message, userId }
+        { message, userId },{ withCredentials: true }
       );
       console.log(response, "😊response after sending message");
 

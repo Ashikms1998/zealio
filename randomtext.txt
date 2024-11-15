@@ -47,3 +47,31 @@ const useGetConversations = () => {
 };
 
 export default useGetConversations;
+
+
+
+
+layout for home 
+
+
+
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { userDetailsStore } from "@/zustand/userAuth";
+
+const AuthLayout = ({ children }: { children: React.ReactNode }) => {
+    const router = useRouter();
+      const isAuthenticated = !!userDetailsStore.getState().user;
+    // const isAuthenticated = localStorage.getItem("auth-storage")
+    console.log("🤓", isAuthenticated);
+    useEffect(() => {
+        if (!isAuthenticated) {
+            router.push("/login");
+        }
+    }, [isAuthenticated]);
+
+    return <>{children}</>;
+};
+
+export default AuthLayout;

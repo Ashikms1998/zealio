@@ -6,7 +6,7 @@ import { Footer, Navbar } from '@/components';
 import { ThreeDCardDemo } from '@/components/3d-card';
 import { px } from 'framer-motion';
 import { cookies } from 'next/headers';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { userDetailsStore } from '@/zustand/userAuth';
 
@@ -14,14 +14,23 @@ const Page = () => {
   const token = Cookies.get('accessToken');
   const { login } = userDetailsStore();
   const router = useRouter();
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     if (token) {
       login(token)
-    } else {
-      //Logout function here
     }
-  }, [])
+  }, [token])
+
+
+
+  useEffect(() => {   
+    const accessToken = searchParams.get('accessToken')
+    if (accessToken) {
+      login(accessToken)
+      router.replace('/home');
+    }
+  }, [searchParams]);
 
   return (
     <>

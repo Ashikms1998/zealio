@@ -14,7 +14,6 @@ import { date } from "zod";
 import { useRouter } from "next/navigation";
 import { LoginForm } from "../../../../types";
 import SignInWithGoogleButton from "@/components/ui/auth/signIn-google";
-import { login } from "@/redux/actions/auth.action";
 import { userDetailsStore } from "@/zustand/userAuth";
 
 const url = process.env.NEXT_PUBLIC_API_URL as string;
@@ -46,7 +45,6 @@ const Page = () => {
       if (response) {
         const { accessToken } = response.data;
         login(response.data.accessToken)
-        localStorage.setItem('accessToken', accessToken);
         toast.success("login successfull", {
           position: "top-center",
         })

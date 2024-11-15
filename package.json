@@ -33,6 +33,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "firebase": "^10.13.2",
+    "flowbite-react": "^0.10.2",
     "font-awesome": "^4.7.0",
     "framer-motion": "^11.11.7",
     "inspector": "^0.5.0",

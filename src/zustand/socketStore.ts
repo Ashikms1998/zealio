@@ -215,6 +215,7 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
       return;
     }
     const peer = get().peer;
+    console.log(peer,'peeer');
     if (peer) {
       peer.peerConnection?.signal(data.sdp);
       return;
@@ -269,6 +270,9 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
     }
 
     const newPeer = get().createPeer(stream, true);
+    if(!newPeer){
+      console.log('peer illaaa');
+    }
     set({
       peer: {
         peerConnection: newPeer,
@@ -278,7 +282,9 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
     });
 
     newPeer.on("signal", async (data: SignalData) => {
+      console.log('going to signaling');
       const { socket } = get();
+      console.log(socket,'socketr after signalinggg');
       if (socket) {
         socket.emit("webrtcSignal", {
           sdp: data,
@@ -291,9 +297,17 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
 
   initializeSocket: () => {
     const authStore = userDetailsStore.getState();
+    console.log("1",authStore);
     const user = authStore.user;
-    const socket = userDetailsStore.getState();
-    const newSocket = socket.socket
+    const userId = authStore.user?.id
+    console.log("2",user);
+    // const socket = userDetailsStore.getState();
+    // console.log("3",socket);
+    const newSocket = io(process.env.NEXT_PUBLIC_API_URL, {
+      query: { userId },
+    });
+    set({socket:newSocket})
+    // const newSocket = socket.socket
     console.log("newSocket",newSocket,"auth store",authStore);
     if (!user || !user?.id) {
       console.error("User is not properly authenticated");
@@ -313,9 +327,10 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
 
 
 
-    // const newSocket = io(`${BACKEND_URL}`);
+    // const socketSetting = io(`${BACKEND_URL}`);
     // console.log("connecting",newSocket);
     // set({ socket: newSocket });
+
 
     const onConnect = () => {
       set({ isSocketConnected: true });

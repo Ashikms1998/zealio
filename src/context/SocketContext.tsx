@@ -5,6 +5,7 @@ const url = process.env.NEXT_PUBLIC_API_URL;
 import { io, Socket } from "socket.io-client"
 import { OnGoingCall } from "../../types/SocketTypes";
 import useConversation from "@/zustand/useConversation";
+import { useSocketStore } from "@/zustand/socketStore";
 
 
 const SocketContext = createContext<Socket | null>(null);
@@ -14,33 +15,13 @@ export const useSocketContext = () => {
 }
 
 export const SocketContextProvider = ({ children }: { children: React.ReactNode }) => {
-    const [isSocket, setIsSetSocket] = useState<Socket | null>(null);
-    // const [onlineUsers, setOnlineUsers] = useState([]);
-    const user = userDetailsStore((state) => state.user?.id)
-    const { socket, setSocket } = userDetailsStore()
-    const [ongoingCall, setOngoingCall] = useState<OnGoingCall | null>(null)
-    const receiverId = useConversation((state)=>state.selectedConversation?.id);
-    // const socket = userDetailsStore((state) => state.socket);
+    const { socket, initializeSocket } = useSocketStore()
+
     useEffect(() => {
-        if (user) {
-            const socket = io(process.env.NEXT_PUBLIC_API_URL, {
-                query: {
-                    userId: user
-                }
-            });
-            console.log("This is socket👌", socket, "This is userId😊", user);
-            setSocket(socket);
-            return () => socket.close();
-        } else {
-            if (socket)
-                return () => {
-                    socket.close();
-                    setSocket(null)
-
-                };
+        if (!socket) {
+            initializeSocket()
         }
-
-    }, [user])
+    }, [socket, initializeSocket]);
 
     return (
         <SocketContext.Provider value={socket}>

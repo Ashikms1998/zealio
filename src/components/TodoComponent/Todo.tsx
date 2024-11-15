@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import { DecodedToken } from '../../../types';
 import { BsCircleFill, BsFillCheckCircleFill, BsFillTrashFill } from 'react-icons/bs';
+import { userDetailsStore } from '@/zustand/userAuth';
 
 
 const url = process.env.NEXT_PUBLIC_API_URL as string;
@@ -61,30 +62,40 @@ const Todo = () => {
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
 
-    const decodeToken = useCallback(() => {
-        const token = Cookies.get('accessToken');
-        if (token) {
-            setAccessToken(token);
-            try {
-                const decoded = jwtDecode<DecodedToken>(token);
-                setUserId(decoded.userId);
-            } catch (error) {
-                console.error('Error decoding token:', error);
-                /* Handle the error, e.g., redirect to login or clear invalid token*/
-                Cookies.remove('accessToken');
-                setAccessToken(null);
-                setUserId(null);
-            }
-        } else {
+    // const decodeToken = useCallback(() => {
+    //     const token = Cookies.get('accessToken');
+    //     if (token) {
+    //         setAccessToken(token);
+    //         try {
+    //             const decoded = jwtDecode<DecodedToken>(token);
+    //             setUserId(decoded.userId);
+    //         } catch (error) {
+    //             console.error('Error decoding token:', error);
+    //             /* Handle the error, e.g., redirect to login or clear invalid token*/
+    //             Cookies.remove('accessToken');
+    //             setAccessToken(null);
+    //             setUserId(null);
+    //         }
+    //     } else {
 
-            /* Handle case where token is not present have to redirect to the refresh token setup if found refresh token create an access token else login*/
-            console.log('No access token found');
-        }
-    }, []);
+    //         /* Handle case where token is not present have to redirect to the refresh token setup if found refresh token create an access token else login*/
+    //         console.log('No access token found');
+    //     }
+    // }, []);
+
+    // useEffect(() => {
+    //     decodeToken();
+    // }, [decodeToken]);
 
     useEffect(() => {
-        decodeToken();
-    }, [decodeToken]);
+        const user = userDetailsStore.getState().user?.id;
+        if (user) {
+            setUserId(user);
+            } else {
+            setUserId(null);
+            }
+        console.log(user, "user details for navbar");
+      }, []);
 
     useEffect(() => {
         if (userId) {
@@ -93,14 +104,14 @@ const Todo = () => {
     }, [userId]);
 
     useEffect(() => {
-        if (!accessToken || !userId) {
-            console.error('No access token or userId available. Please login again.');
+        if (!userId) {
+            console.error('No userId available. Please login again.');
             return;
         }
-        axios.get(`${url}/auth/fetchTodo?userId=${userId}`,)
+        axios.get(`${url}/auth/fetchTodo?userId=${userId}`,{ withCredentials: true })
             .then(result => setTodos(result.data))
             .catch(error => console.log(error))
-    }, [accessToken, userId]);
+    }, [userId]);
 
     const handleDone = async (taskId: string, userId: string) => {
         try {
@@ -115,7 +126,7 @@ const Todo = () => {
 
         });
 
-            const response = await axios.put(`${url}/auth/updateTaskCompleation?_id=${taskId}&userId=${userId}`)
+            const response = await axios.put(`${url}/auth/updateTaskCompleation?_id=${taskId}&userId=${userId}`,{},{ withCredentials: true })
             if (response.status != 200) {
                 setTodos(prevTodos =>
                     prevTodos.map(todo =>
@@ -138,7 +149,7 @@ const Todo = () => {
     const handleDelete = async (taskId: string, userId: string) => {
         try {
             console.log(taskId, userId, "this is product id dude")
-            const response = await axios.delete(`${url}/auth/deleteTask?_id=${taskId}&userId=${userId}`)
+            const response = await axios.delete(`${url}/auth/deleteTask?_id=${taskId}&userId=${userId}`,{ withCredentials: true })
             if (response.status === 200) {
                 const deletedTask = response.data;
                 setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== taskId));
@@ -149,7 +160,7 @@ const Todo = () => {
             }
         } catch (error) {
             console.error('Unexpected error:', error);
-            alert('An unexpected error occurred. Please try again.');
+            alert('An unexpected error occurred in deleting Task. Please try again.');
         }
     }
 

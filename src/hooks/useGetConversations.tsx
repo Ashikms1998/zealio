@@ -47,7 +47,7 @@ const useGetConversations = () => {
             setLoading(true);
             try {
               console.log(userId,"ithan sadhnm");
-                const response = await axios.post(`${url}/chat/userLog`,{userId})
+                const response = await axios.post(`${url}/chat/userLog`,{userId},{ withCredentials: true })
                 
                 const data = response.data.data
                 if(data.error){

@@ -3,10 +3,51 @@ import Link from "next/link";
 import Image from "next/image";
 import CustomButton from "./CustomButton";
 import { userDetailsStore } from "@/zustand/userAuth";
+import { useEffect, useState } from "react";
+import { Prev } from "react-bootstrap/esm/PageItem";
+import { Dropdown } from "flowbite-react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { useRouter } from "next/navigation";
+import axios from "axios";
+const url = process.env.NEXT_PUBLIC_API_URL as string;
 
 const Navbar = () => {
-  const userDetails = userDetailsStore((state) => state.user);
-  // console.log(userDetails, "user details for navbar");
+  const router = useRouter()
+  const logout = userDetailsStore.getState().logout
+  
+  interface userTs {
+    id: string,
+    firstName: string,
+    lastName: string
+
+  }
+  const [userDetails, setUserDetails] = useState<userTs | null | undefined>(undefined);
+
+  useEffect(() => {
+    const user = userDetailsStore.getState().user;
+    setUserDetails(user);
+  }, []);
+
+
+
+  const handleLogout = async () => {
+    try {
+      const res = await axios.post(`${url}/auth/logout`, {}, { withCredentials: true })
+      console.log(res)
+      if (res.status === 200) {
+        localStorage.removeItem('auth-storage')
+        localStorage.removeItem('accessToken')
+        console.log(logout,"This is logiut");
+        logout()
+        router.push("/login")
+      }
+    } catch (error) {
+      console.error("Loggingout failed", error)
+      localStorage.removeItem('auth-storage');
+      router.push("/login");
+    }
+  }
 
   return (
     <header className="w-full absolute z-10">
@@ -16,7 +57,7 @@ const Navbar = () => {
         </Link>
 
         <div className="flex gap-14 mt-5">
-          <Link href="/signin" className="flex justify-center items-center text-black-700 font-bold mb-4">
+          <Link href="/home" className="flex justify-center items-center text-black-700 font-bold mb-4">
             Focus Room
           </Link>
           <Link href="/rules" className="flex justify-center items-center text-black-700 font-bold mb-4">
@@ -30,10 +71,14 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* {userDetails ? (
+        {userDetails ? (
           <div className="flex items-center gap-4">
 
-            <div className="font-semibold">{userDetails.firstName}</div>
+
+            <Dropdown label={<span className="text-black font-semibold">{userDetails?.firstName}<FontAwesomeIcon icon={faCaretDown} className="ml-1 text-black" /></span>} dismissOnClick={false}>
+              <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+
+            </Dropdown>
 
             <button
               className="flex justify-center items-center bg-blue-500 text-white font-semibold py-2 px-4 rounded shadow hover:bg-blue-600 transition duration-200"
@@ -42,7 +87,7 @@ const Navbar = () => {
               YouTube
             </button>
           </div>
-        ) : ( */}
+        ) : (
           <div>
             <Link href="/signin">
               <CustomButton
@@ -59,8 +104,8 @@ const Navbar = () => {
               />
             </Link>
           </div>
-        {/* )
-        } */}
+        )
+        }
       </nav>
     </header>
   );

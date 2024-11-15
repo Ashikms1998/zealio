@@ -29,8 +29,7 @@ export const userDetailsStore = create<AuthState>()(
       user: null,
       socket: null,
 
-      //
-
+      
       // setSocket: (socket: Socket | null) => {
       //   set({ socket });
       // },

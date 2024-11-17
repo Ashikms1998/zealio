@@ -14,7 +14,6 @@ export default function SocketInitializer() {
   const {initializeSocket, socket} = useSocketStore()
 
   useEffect(() => {
-
     if (!socket ) {
       initializeSocket();
     }
@@ -28,4 +27,6 @@ export default function SocketInitializer() {
 
   return null;
 }
+
+
 

@@ -41,7 +41,7 @@ const Page = () => {
       const response = await axios.post(`${url}/auth/login`, data, {
         withCredentials: true,
       })
-      
+      console.log("🦹‍♀️🦹‍♀️🦹‍♀️🦹‍♀️🦹‍♀️🦹‍♀️",response)
       if (response) {
         const { accessToken } = response.data;
         login(response.data.accessToken)
@@ -49,7 +49,7 @@ const Page = () => {
           position: "top-center",
         })
       }
-      router.push("/home")
+      router.push(`/home?accessToken=${response.data.accessToken}`)
     } catch (error) {
       console.log("An unexpected error occurred:", error)
 

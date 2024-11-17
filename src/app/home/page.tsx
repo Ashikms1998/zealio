@@ -11,26 +11,22 @@ import Cookies from 'js-cookie';
 import { userDetailsStore } from '@/zustand/userAuth';
 
 const Page = () => {
-  const token = Cookies.get('accessToken');
   const { login } = userDetailsStore();
   const router = useRouter();
   const searchParams = useSearchParams()
 
-  useEffect(() => {
-    if (token) {
-      login(token)
-    }
-  }, [token])
-
-
-
   useEffect(() => {   
     const accessToken = searchParams.get('accessToken')
+    console.log("triggerd")
     if (accessToken) {
       login(accessToken)
       router.replace('/home');
     }
   }, [searchParams]);
+
+useEffect(()=>{
+  
+})
 
   return (
     <>

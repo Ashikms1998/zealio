@@ -1,7 +1,8 @@
 import axios from "axios";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { io,Socket } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
+import { useSocketStore } from "./socketStore";
 const url = process.env.NEXT_PUBLIC_API_URL;
 
 interface userDetails {
@@ -29,7 +30,6 @@ export const userDetailsStore = create<AuthState>()(
       user: null,
       socket: null,
 
-      
       // setSocket: (socket: Socket | null) => {
       //   set({ socket });
       // },
@@ -46,8 +46,7 @@ export const userDetailsStore = create<AuthState>()(
 
         newSocket.on("connect", () => {
           set({ socket: newSocket });
-          console.log("Socket connected successfully",newSocket,);
-          
+          console.log("Socket connected successfully", newSocket);
         });
 
         newSocket.on("error", (err) => {
@@ -70,6 +69,7 @@ export const userDetailsStore = create<AuthState>()(
             `${url}/auth/userDetails`,
             { withCredentials: true }
           );
+          console.log("👨‍🎓👨‍🎓👨‍🎓👨‍🎓👨‍🎓👷👷👷👷login response",response)
           const userData = response.data;
           set({
             user: {
@@ -78,6 +78,12 @@ export const userDetailsStore = create<AuthState>()(
               lastName: userData.lastName,
             },
           });
+
+          // const existingSocket = useSocketStore.getState().socket;
+          // if (!existingSocket) {
+          //   get().connectSocket(userData.id);
+          // }
+
           get().connectSocket(userData.id);
         } catch (error) {
           console.log("Failed to fetch user data:", error);
@@ -85,11 +91,13 @@ export const userDetailsStore = create<AuthState>()(
             accessToken: null,
             isAuthenticated: false,
             user: null,
-            socket: null
+            socket: null,
           });
         }
       },
       logout: () => {
+        const { disconnectSocket } = useSocketStore.getState();
+        disconnectSocket();
         const socket = get().socket;
         if (socket) {
           socket.disconnect();
@@ -99,8 +107,9 @@ export const userDetailsStore = create<AuthState>()(
           accessToken: null,
           isAuthenticated: false,
           user: null,
-       socket: null
+          socket: null,
         });
+        localStorage.removeItem("zustand-persist");
       },
       setSocket: (socket: Socket | null) => {
         console.log(socket, "This is socket from user");

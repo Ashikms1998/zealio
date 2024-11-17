@@ -14,7 +14,6 @@ const url = process.env.NEXT_PUBLIC_API_URL as string;
 
 const Navbar = () => {
   const router = useRouter()
-  const logout = userDetailsStore.getState().logout
   
   interface userTs {
     id: string,
@@ -38,7 +37,8 @@ const Navbar = () => {
       if (res.status === 200) {
         localStorage.removeItem('auth-storage')
         localStorage.removeItem('accessToken')
-        console.log(logout,"This is logiut");
+        localStorage.removeItem("zustand-persist");
+        const { logout } = userDetailsStore.getState();
         logout()
         router.push("/login")
       }

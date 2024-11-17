@@ -14,21 +14,23 @@ import { useSocketStore } from '@/zustand/socketStore';
 const Layout = ({ children }: { children: React.ReactNode }) => {
 
     const { socket } = userDetailsStore()
-    const {handleIncomingCall} = useSocketStore()
+    const { handleIncomingCall, initializeSocket } = useSocketStore()
     useEffect(() => {
-        socket?.on("incomingcall", (callData) => {
-            console.log("Incoming call received👍:", callData);
-            handleIncomingCall(callData)
-        });
-        return () => {
-            socket?.off("incomingcall");
-        };
+        // socket?.on("incomingcall", (callData) => {
+        //     console.log("Incoming call received👍:", callData);
+        //     handleIncomingCall(callData)
+        // });
+        // return () => {
+        //     socket?.off("incomingcall");
+        // };
+        if (socket)
+            initializeSocket(socket)
     }, [socket])
 
     return (
         <>
-        { children }
-        
+            {children}
+
         </>
 
 

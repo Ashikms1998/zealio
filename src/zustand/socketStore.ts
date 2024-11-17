@@ -14,7 +14,7 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
 interface iSocketState {
   socket: Socket | null;
   isSocketConnected: boolean;
-  initializeSocket: () => void;
+  initializeSocket: (socket:Socket) => void;
   disconnectSocket: () => void;
   ongoingCall: OnGoingCall | null;
   localStream: MediaStream | null;
@@ -162,6 +162,7 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
   },
 
   createPeer: (stream, initiator) => {
+    console.log("Creating peer with initiator:", initiator, "stream:", stream);
     const iceServers: RTCIceServer[] = [
       {
         urls: [
@@ -220,7 +221,7 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
       peer.peerConnection?.signal(data.sdp);
       return;
     }
-
+    console.log("About to call createPeer");
     const newPeer = get().createPeer(localStream, true);
     set({
       peer: {
@@ -243,7 +244,7 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
   },
 
   handleJoinCall: async (ongoingCall) => {
-    console.log("joining");
+    console.log("joining =>",ongoingCall);
     set((state) => {
       if (state.ongoingCall) {
         return {
@@ -262,14 +263,17 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
         };
       }
     });
-
+    console.log("About to call stream");
     const stream = await get().getMediaStream();
+    console.log("About to call stream",stream);
     if (!stream) {
       console.log("Could not gt stream in handleJoinCall");
       return;
     }
 
+    console.log("About to call createPeer initialization");
     const newPeer = get().createPeer(stream, true);
+    console.log("About to call newPeer ",newPeer);
     if(!newPeer){
       console.log('peer illaaa');
     }
@@ -295,17 +299,21 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
     });
   },
 
-  initializeSocket: () => {
+  initializeSocket: (newSocket:Socket) => {
     const authStore = userDetailsStore.getState();
-    console.log("1",authStore);
+    console.log("1",authStore,"userDetailsStore",userDetailsStore);
     const user = authStore.user;
     const userId = authStore.user?.id
     console.log("2",user);
     // const socket = userDetailsStore.getState();
-    // console.log("3",socket);
-    const newSocket = io(process.env.NEXT_PUBLIC_API_URL, {
-      query: { userId },
-    });
+    console.log("3",userId);
+    
+    // const newSocket = io(process.env.NEXT_PUBLIC_API_URL, {
+    //   query: { userId },
+    // });
+        // const newSocket = userDetailsStore((state)=>state.socket)
+    console.log(newSocket,"This is new socket");
+
     set({socket:newSocket})
     // const newSocket = socket.socket
     console.log("newSocket",newSocket,"auth store",authStore);
@@ -324,12 +332,6 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
     newSocket?.on("error", (err) => {
       console.error('Socket error:', err);
     });
-
-
-
-    // const socketSetting = io(`${BACKEND_URL}`);
-    // console.log("connecting",newSocket);
-    // set({ socket: newSocket });
 
 
     const onConnect = () => {
@@ -375,8 +377,14 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
     const { socket } = get();
     if (socket) {
       socket.disconnect();
-      set({ socket: null, isSocketConnected: false });
     }
+    set({
+      socket: null,
+      isSocketConnected: false,
+      ongoingCall: null,
+      localStream: null,
+      peer: null,
+    });
   },
 }));
 

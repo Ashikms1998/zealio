@@ -46,7 +46,7 @@ const HomeScreen = () => {
 
           {videos.map((video,index) => (
             <Col lg={3} md={4} key={index}>
-              <Link href={"http://localhost:3000/study/youtube/watch-page?v=" + video.id}
+              <Link href={"https://zealio.live/study/youtube/watch-page?v=" + video.id}
                 className="no-underline"
                 style={{ textDecoration: 'none' }}
               >

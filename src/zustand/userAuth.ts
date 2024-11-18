@@ -4,7 +4,7 @@ import { persist } from "zustand/middleware";
 import { io, Socket } from "socket.io-client";
 import { useSocketStore } from "./socketStore";
 // const url = process.env.NEXT_PUBLIC_API_URL;
-const url = "https://www.api.zealio.live"
+const url = "https://api.zealio.live"
 
 interface userDetails {
   id: string;
@@ -44,7 +44,7 @@ export const userDetailsStore = create<AuthState>()(
         // const newSocket = io(process.env.NEXT_PUBLIC_API_URL, {
         //   query: { userId },
         // });
-        const newSocket = io("https://www.api.zealio.live", {
+        const newSocket = io("https://api.zealio.live", {
           query: { userId },
         });
 

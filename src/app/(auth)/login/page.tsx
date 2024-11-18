@@ -39,6 +39,7 @@ const Page = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      console.log(url,"login socket")
       const response = await axios.post(`${url}/auth/login`, data, {
         withCredentials: true,
       })

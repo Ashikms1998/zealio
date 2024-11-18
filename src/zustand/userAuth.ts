@@ -69,6 +69,7 @@ export const userDetailsStore = create<AuthState>()(
       login: async (accessToken) => {
         try {
           set({ accessToken, isAuthenticated: true });
+          console.log(url,"login in auth store")
           const response = await axios.get<userDetails>(
             `${url}/auth/userDetails`,
             { withCredentials: true }

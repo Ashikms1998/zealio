@@ -49,8 +49,8 @@ export const userDetailsStore = create<AuthState>()(
         const newSocket = io("https://api.zealio.live", {
           query: { userId },
         });
-        
-        console.log("before socket initialization 4")
+
+        console.log("before socket initialization 4",newSocket)
 
 
         newSocket.on("connect", () => {

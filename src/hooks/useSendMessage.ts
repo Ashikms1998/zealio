@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { DecodedToken } from "../../types";
+import { userDetailsStore } from "@/zustand/userAuth";
 const url = process.env.NEXT_PUBLIC_API_URL as string;
 
 const useSendMessage = () => {
@@ -14,8 +15,10 @@ const useSendMessage = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
 
+  
   const decodeToken = useCallback(() => {
-    const token = Cookies.get("accessToken");
+    const token = userDetailsStore((state)=>state.accessToken)
+    // const token = Cookies.get("accessToken");
     if (token) {
       setAccessToken(token);
       try {

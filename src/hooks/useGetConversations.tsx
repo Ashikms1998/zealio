@@ -6,6 +6,7 @@ const url = process.env.NEXT_PUBLIC_API_URL as string;
 import { ConversationType, DecodedToken } from '../../types';
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
+import { userDetailsStore } from "@/zustand/userAuth";
 
 const useGetConversations = () => {
   const [loading,setLoading] = useState(false);
@@ -14,7 +15,8 @@ const useGetConversations = () => {
   const [userId, setUserId] = useState<string | null>(null);
 
   const decodeToken = useCallback(() => {
-    const token = Cookies.get('accessToken');
+    const token = userDetailsStore((state)=>state.accessToken)
+    // const token = Cookies.get('accessToken');
     if (token) {
       setAccessToken(token);
       try {

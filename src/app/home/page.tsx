@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from 'react'
+import React, { Suspense, useEffect } from 'react'
 import Image from 'next/image'
 import { SparklesCore } from "@/components/ui/sparkles";
 import { Footer, Navbar } from '@/components';
@@ -7,7 +7,7 @@ import { ThreeDCardDemo } from '@/components/3d-card';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { userDetailsStore } from '@/zustand/userAuth';
 
-const Page = () => {
+const SearchParamsHandler = () =>{
   const { login } = userDetailsStore();
   const router = useRouter();
   const searchParams = useSearchParams()
@@ -19,15 +19,18 @@ const Page = () => {
       login(accessToken)
       router.replace('/home');
     }
-  }, [searchParams]);
+  }, [searchParams,login,router]);
+  return null
+}
 
-useEffect(()=>{
-  
-})
-
+const Page = () => {
+   const router = useRouter()
   return (
     <>
       <Navbar />
+      <Suspense fallback={<div>Loading...</div>}>
+      <SearchParamsHandler/>
+      </Suspense>
       <div className="h-[40rem] w-full bg-white flex flex-col items-center justify-center overflow-hidden">
 
         <h1 className="md:text-7xl text-3xl lg:text-5xl font-bold text-center text-black relative z-20">

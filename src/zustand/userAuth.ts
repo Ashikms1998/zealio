@@ -35,18 +35,23 @@ export const userDetailsStore = create<AuthState>()(
       //   set({ socket });
       // },
       connectSocket: (userId: string) => {
+        console.log("before socket initialization")
         const existingSocket = get().socket;
+        console.log("before socket initialization 2")
         if (existingSocket) {
           console.log("Socket already exists");
           return;
         }
-
+        console.log("before socket initialization 3")
         // const newSocket = io(process.env.NEXT_PUBLIC_API_URL, {
         //   query: { userId },
         // });
         const newSocket = io("https://api.zealio.live", {
           query: { userId },
         });
+        
+        console.log("before socket initialization 4")
+
 
         newSocket.on("connect", () => {
           set({ socket: newSocket });

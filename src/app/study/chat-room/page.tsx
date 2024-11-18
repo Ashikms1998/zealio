@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components';
-import Image from 'next/image';
 
 const RoomCodeForm = () => {
     const router = useRouter();
@@ -57,21 +56,21 @@ const RoomCodeForm = () => {
 
                         {/* Overlapping Images */}
                         <div className="absolute -top-8 -right-8 w-32 h-32 bg-white rounded-lg shadow-lg overflow-hidden">
-                            <Image
+                            <img
                                 src="../8f896f86a07693b1668eb43dba3031a4-groupvideocall2.jpg"
                                 alt="Product Preview 1"
                                 className="object-cover w-full h-full"
                             />
                         </div>
                         <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white rounded-lg shadow-lg overflow-hidden">
-                            <Image
+                            <img
                                 src="../66bdcb75a3341892120b6528e5f6910a-groupvideocall1.jpg"
                                 alt="Product Preview 2"
                                 className="object-cover w-full h-full"
                             />
                         </div>
                         <div className="absolute top-64 right-12 w-32 h-32 bg-white rounded-lg shadow-lg overflow-hidden">
-                            <Image
+                            <img
                                 src="../50bc2b059b7b72a120f474d2cc758eea-groupvideocall3.jpg"
                                 alt="Product Preview 1"
                                 className="object-cover w-full h-full"
@@ -79,7 +78,7 @@ const RoomCodeForm = () => {
                         </div>
 
                         <div className="absolute -top-14 -left-20 w-32 h-32 bg-white rounded-lg shadow-lg overflow-hidden">
-                            <Image
+                            <img
                                 src="../58a7783ab0259d2f50094b2b4aaff233-groupvideocall4.jpg"
                                 alt="Product Preview 2"
                                 className="object-cover w-full h-full"
@@ -87,7 +86,7 @@ const RoomCodeForm = () => {
                         </div>
 
                         <div className="absolute top-72 left-52 w-32 h-32 bg-white rounded-lg shadow-lg overflow-hidden">
-                            <Image
+                            <img
                                 src="../64597e9411d2879902f86fe8174a613f-grpvideocall6.jpg"
                                 alt="Product Preview 2"
                                 className="object-cover w-full h-full"

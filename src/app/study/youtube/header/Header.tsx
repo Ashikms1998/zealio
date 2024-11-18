@@ -5,7 +5,6 @@ import './_header.scss';
 import { YOUTUBE_SEARCH_API } from '../constant';
 import { YouTubeResponse, YouTubeVideo } from '../../../../../types';
 import { useSearch } from '../search-context/SearchContext';
-import Image from 'next/image';
 
 const Header = () => {
 
@@ -74,7 +73,7 @@ const Header = () => {
 
     <div className='grid grid-flow-col p-3 m-2 shadow-lg' >
       <div className='flex col-span-1'>
-        <Image src='https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg' alt='logo' className='w-28 ' />
+        <img src='https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg' alt='logo' className='w-28 ' />
       </div>
       <div className='col-span-10 px-10 relative'>
         <div className='flex items-center'>

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import useConversation from '@/zustand/useConversation';
 import { ConversationType } from '../../../types';
-import Image from 'next/image';
 
 
 
@@ -32,7 +31,7 @@ const Conversation: React.FC<ConversationProps> = ({ conversation, lastIdx }) =>
                 {/* ${isOnline ? "online":""} */}
                 <div className={`avatar  mr-3`}> 
                     <div className='w-11 rounded-full '>
-                        <Image src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5060z9pN1BKdLvRKExuWHhtc1xvw4VgyioA&s' alt="user avatar" className="w-full rounded-full" />
+                        <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5060z9pN1BKdLvRKExuWHhtc1xvw4VgyioA&s' alt="user avatar" className="w-full rounded-full" />
                     </div>
                 </div>
 

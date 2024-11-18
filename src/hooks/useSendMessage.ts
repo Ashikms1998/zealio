@@ -15,10 +15,9 @@ const useSendMessage = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
 
-  
   const decodeToken = useCallback(() => {
-    const token = userDetailsStore((state)=>state.accessToken)
-    // const token = Cookies.get("accessToken");
+    const token = Cookies.get("accessToken");
+
     if (token) {
       setAccessToken(token);
       try {
@@ -36,6 +35,14 @@ const useSendMessage = () => {
       console.log("No access token found");
     }
   }, []);
+
+  useEffect(()=>{
+    const tokeninLocalStorage = localStorage.getItem("accessToken")
+    const tokenInZustand = userDetailsStore((state)=>state.accessToken)
+    const token = Cookies.get("accessToken");
+    console.log(tokeninLocalStorage,"<=This is localstorage item",token,"<=This is token in cookies",tokenInZustand,"<=This is the token in zustand")
+  },[])
+
 
   // Run the decodeToken function on component mount
   useEffect(() => {

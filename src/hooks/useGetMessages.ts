@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { DecodedToken } from "../../types";
-import { userDetailsStore } from "@/zustand/userAuth";
 const url = process.env.NEXT_PUBLIC_API_URL as string;
 
 const useGetMessages = () => {
@@ -17,8 +16,8 @@ const useGetMessages = () => {
   const [userId, setUserId] = useState<string | null>(null);
 
   const decodeToken = useCallback(() => {
-    const token = userDetailsStore((state)=>state.accessToken)
-    // const token = Cookies.get('accessToken');
+   
+    const token = Cookies.get('accessToken');
     if (token) {
       setAccessToken(token);
       try {
@@ -36,6 +35,12 @@ const useGetMessages = () => {
       console.log('No access token found');
     }
   }, []);
+
+  useEffect(()=>{
+    const tokeninLocalStorage = localStorage.getItem("accessToken")
+    console.log(tokeninLocalStorage,"This is localstorage item")
+  },[])
+
 
   // Run the decodeToken function on component mount
   useEffect(() => {

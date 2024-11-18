@@ -4,10 +4,7 @@ import Image from 'next/image'
 import { SparklesCore } from "@/components/ui/sparkles";
 import { Footer, Navbar } from '@/components';
 import { ThreeDCardDemo } from '@/components/3d-card';
-import { px } from 'framer-motion';
-import { cookies } from 'next/headers';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Cookies from 'js-cookie';
 import { userDetailsStore } from '@/zustand/userAuth';
 
 const Page = () => {

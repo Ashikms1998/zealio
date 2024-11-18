@@ -81,14 +81,10 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
   },
 
   handleCall: async (receiverUser) => {
-    console.log("initialing call");
     const callerUser = userDetailsStore.getState().user;
-    console.log(callerUser, "callerUser");
     const socket = userDetailsStore.getState().socket;
-    console.log(socket, "this is socket");
     if (!callerUser || !socket) return;
     const stream = await get().getMediaStream();
-    console.log(stream, "This is stream");
     if (!stream) {
       console.log("No stream in handle call");
       return;
@@ -101,7 +97,7 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
         isRinging: false,
       },
     });
-    console.log(participants, "emit call");
+    console.log("make offer user1️⃣",participants);
     socket.emit("call", participants);
   },
 
@@ -193,18 +189,21 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
       }));
     });
 
-    peer.on("error", console.error);
-    peer.on("close", () => get().handleHangup());
+    peer.on('error', (err) => {
+      console.error("creatPeer connection error:", err);
+  })
 
-    const rtcPeerConnection: RTCPeerConnection = (peer as any)._pc;
-    rtcPeerConnection.oniceconnectionstatechange = async () => {
-      if (
-        rtcPeerConnection.iceConnectionState === "disconnected" ||
-        rtcPeerConnection.iceConnectionState === "failed"
-      ) {
-        get().handleHangup();
-      }
-    };
+    // peer.on("close", () => get().handleHangup());
+
+    // const rtcPeerConnection: RTCPeerConnection = (peer as any)._pc;
+    // rtcPeerConnection.oniceconnectionstatechange = async () => {
+    //   if (
+    //     rtcPeerConnection.iceConnectionState === "disconnected" ||
+    //     rtcPeerConnection.iceConnectionState === "failed"
+    //   ) {
+    //     get().handleHangup();
+    //   }
+    // };
 
     return peer;
   },
@@ -221,8 +220,9 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
       peer.peerConnection?.signal(data.sdp);
       return;
     }
-    console.log("About to call createPeer");
     const newPeer = get().createPeer(localStream, true);
+    console.log("create new pear user2️⃣ ",newPeer);
+
     set({
       peer: {
         peerConnection: newPeer,
@@ -234,6 +234,8 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
     newPeer.on("signal", async (signalData: SignalData) => {
       const { socket } = get();
       if (socket) {
+         console.log("send sdp user2️⃣ ",newPeer);
+
         socket.emit("webrtcSignal", {
           sdp: signalData,
           ongoingCall: data.ongoingCall,
@@ -263,7 +265,6 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
         };
       }
     });
-    console.log("About to call stream");
     const stream = await get().getMediaStream();
     console.log("About to call stream",stream);
     if (!stream) {
@@ -271,24 +272,19 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
       return;
     }
 
-    console.log("About to call createPeer initialization");
     const newPeer = get().createPeer(stream, true);
-    console.log("About to call newPeer ",newPeer);
-    if(!newPeer){
-      console.log('peer illaaa');
-    }
+    console.log("About to call newPeer 2️⃣",newPeer);
     set({
       peer: {
         peerConnection: newPeer,
-        participantUser: ongoingCall.participants.receiver as User,
+        participantUser: ongoingCall.participants.receiver,
         stream: undefined,
       },
     });
 
     newPeer.on("signal", async (data: SignalData) => {
-      console.log('going to signaling');
+      console.log('user2 sdp 2️⃣',data);
       const { socket } = get();
-      console.log(socket,'socketr after signalinggg');
       if (socket) {
         socket.emit("webrtcSignal", {
           sdp: data,
@@ -350,6 +346,7 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
     });
 
     newSocket?.on("webrtcSignal", (data) => {
+      console.log("This is data",data)
       get().completePeerConnection(data);
     });
 

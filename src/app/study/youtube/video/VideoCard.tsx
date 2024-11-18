@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React from 'react'
 
 const VideoCard = ({ info }: any) => {
@@ -7,7 +8,7 @@ const VideoCard = ({ info }: any) => {
 
     return (
         <div className='video p-2 hover:bg-gray-100 rounded-lg'>
-            <img alt='Thumbnail' className='rounded-md' src={thumbnails.medium.url} />
+            <Image alt='Thumbnail' className='rounded-md' src={thumbnails.medium.url} />
             <ul className="flex flex-col space-y-1  ">
 
                 <li className="font-sans font-semibold text-black truncate" style={{ textDecoration: 'none' }}>

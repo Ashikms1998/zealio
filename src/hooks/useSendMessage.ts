@@ -38,7 +38,7 @@ const useSendMessage = () => {
 
   useEffect(()=>{
     const tokeninLocalStorage = localStorage.getItem("accessToken")
-    console.log(tokeninLocalStorage,"<=This is localstorage item")
+    console.log(tokeninLocalStorage,"<=This is localstorage item in useSendMessage")
     const tokenInZustand = userDetailsStore((state)=>state.accessToken)
     console.log(tokenInZustand,"<=This is the token in zustand")
     const token = Cookies.get("accessToken");

@@ -1,10 +1,10 @@
 import axios from "axios";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { io, Socket } from "socket.io-client";
 import { useSocketStore } from "./socketStore";
-// const url = process.env.NEXT_PUBLIC_API_URL;
-const url = "https://api.zealio.live"
+const url = process.env.NEXT_PUBLIC_API_URL;
+// const url = "https://api.zealio.live"
 
 interface userDetails {
   id: string;
@@ -43,12 +43,12 @@ export const userDetailsStore = create<AuthState>()(
           return;
         }
         console.log("before socket initialization 3")
-        // const newSocket = io(process.env.NEXT_PUBLIC_API_URL, {
-        //   query: { userId },
-        // });
-        const newSocket = io("https://api.zealio.live", {
+        const newSocket = io(process.env.NEXT_PUBLIC_API_URL, {
           query: { userId },
         });
+        // const newSocket = io("https://api.zealio.live", {
+        //   query: { userId },
+        // });
 
         console.log("before socket initialization 4",newSocket)
 
@@ -128,7 +128,7 @@ export const userDetailsStore = create<AuthState>()(
     }),
     {
       name: "auth-storage",
-      getStorage: () => localStorage,
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         accessToken: state.accessToken,
         isAuthenticated: state.isAuthenticated,

@@ -16,8 +16,8 @@ import { LoginForm } from "../../../../types";
 import SignInWithGoogleButton from "@/components/ui/auth/signIn-google";
 import { userDetailsStore } from "@/zustand/userAuth";
 
-// const url = process.env.NEXT_PUBLIC_API_URL as string;
-const url = "https://api.zealio.live"
+const url = process.env.NEXT_PUBLIC_API_URL as string;
+// const url = "https://api.zealio.live"
 
 const Page = () => {
 

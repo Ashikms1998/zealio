@@ -13,25 +13,25 @@ const useGetConversations = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
 
-  const decodeToken = useCallback(() => {
-    const token = Cookies.get('accessToken');
-    if (token) {
-      setAccessToken(token);
-      try {
-        const decoded = jwtDecode<DecodedToken>(token);
-        setUserId(decoded.userId);
-      } catch (error) {
-        console.error('Error decoding token:', error);
-        // Handle the error, e.g., clear invalid token
-        Cookies.remove('accessToken');
-        setAccessToken(null);
-        setUserId(null);
-      }
-    } else {
-      // Handle case where token is not present
-      console.log('No access token found');
-    }
-  }, []);
+  // const decodeToken = useCallback(() => {
+  //   const token = Cookies.get('accessToken');
+  //   if (token) {
+  //     setAccessToken(token);
+  //     try {
+  //       const decoded = jwtDecode<DecodedToken>(token);
+  //       setUserId(decoded.userId);
+  //     } catch (error) {
+  //       console.error('Error decoding token:', error);
+  //       // Handle the error, e.g., clear invalid token
+  //       Cookies.remove('accessToken');
+  //       setAccessToken(null);
+  //       setUserId(null);
+  //     }
+  //   } else {
+  //     // Handle case where token is not present
+  //     console.log('No access token found');
+  //   }
+  // }, []);
 
   // useEffect(()=>{
   //   const tokeninLocalStorage = localStorage.getItem("accessToken")
@@ -45,13 +45,15 @@ const useGetConversations = () => {
       try {
         const parsedState = JSON.parse(storedState);
         const accessToken = parsedState?.state?.accessToken;
-        parsedState
-        if (accessToken) {
+        const userId = parsedState?.state?.user?.id
+        console.log(userId,"this is the userid in usegetconversation")
+        if (accessToken&&userId) {
           setAccessToken(accessToken)
-
+          setUserId(userId)
           console.log("Access Token in useGetConversation:", accessToken);
-        } else {
-          console.error("Access Token not found in localStorage useGetConversation.");
+        }
+        else {
+          console.error("Access Token or UserId not found in localStorage useGetConversation.");
         }
       } catch (error) {
         console.error("Failed to parse state from localStorage useGetConversation:", error);
@@ -63,9 +65,9 @@ const useGetConversations = () => {
 
 
 
-  useEffect(() => {
-    decodeToken();
-  }, [decodeToken]);
+  // useEffect(() => {
+  //   decodeToken();
+  // }, [decodeToken]);
 
   useEffect(() => {
     const getConversations = async () => {

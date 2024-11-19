@@ -15,41 +15,66 @@ const useSendMessage = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
 
-  const decodeToken = useCallback(() => {
-    const token = Cookies.get("accessToken");
+  // const decodeToken = useCallback(() => {
+  //   const token = Cookies.get("accessToken");
 
-    if (token) {
-      setAccessToken(token);
+  //   if (token) {
+  //     setAccessToken(token);
+  //     try {
+  //       const decoded = jwtDecode<DecodedToken>(token);
+  //       setUserId(decoded.userId);
+  //     } catch (error) {
+  //       console.error("Error decoding token:", error);
+
+  //       Cookies.remove("accessToken");
+  //       setAccessToken(null);
+  //       setUserId(null);
+  //     }
+  //   } else {
+  //     /* Handle case where token is not present */
+  //     console.log("No access token found");
+  //   }
+  // }, []);
+
+  // useEffect(()=>{
+  //   const tokeninLocalStorage = localStorage.getItem("accessToken")
+  //   console.log(tokeninLocalStorage,"<=This is localstorage item in useSendMessage")
+  //   const tokenInZustand = userDetailsStore((state)=>state.accessToken)
+  //   console.log(tokenInZustand,"<=This is the token in zustand")
+  //   const token = Cookies.get("accessToken");
+  //   console.log(tokenInZustand,"<=This is the token in zustand")
+  // },[userDetailsStore,localStorage,Cookies])
+
+
+  // // Run the decodeToken function on component mount
+  // useEffect(() => {
+  //   decodeToken();
+  // }, [decodeToken]);
+
+  useEffect(() => {
+    const storedState = localStorage.getItem("auth-storage");
+    console.log(storedState, "this is stored state")
+    if (storedState) {
       try {
-        const decoded = jwtDecode<DecodedToken>(token);
-        setUserId(decoded.userId);
+        const parsedState = JSON.parse(storedState);
+        const accessToken = parsedState?.state?.accessToken;
+        const userId = parsedState?.state?.user?.id
+        console.log(userId,"this is the userid in usegetconversation")
+        if (accessToken&&userId) {
+          setAccessToken(accessToken)
+          setUserId(userId)
+          console.log("Access Token in useGetConversation:", accessToken);
+        }
+        else {
+          console.error("Access Token or UserId not found in localStorage useGetConversation.");
+        }
       } catch (error) {
-        console.error("Error decoding token:", error);
-
-        Cookies.remove("accessToken");
-        setAccessToken(null);
-        setUserId(null);
+        console.error("Failed to parse state from localStorage useGetConversation:", error);
       }
     } else {
-      /* Handle case where token is not present */
-      console.log("No access token found");
+      console.error("State not found in localStorage useGetConversation.");
     }
   }, []);
-
-  useEffect(()=>{
-    const tokeninLocalStorage = localStorage.getItem("accessToken")
-    console.log(tokeninLocalStorage,"<=This is localstorage item in useSendMessage")
-    const tokenInZustand = userDetailsStore((state)=>state.accessToken)
-    console.log(tokenInZustand,"<=This is the token in zustand")
-    const token = Cookies.get("accessToken");
-    console.log(tokenInZustand,"<=This is the token in zustand")
-  },[userDetailsStore,localStorage,Cookies])
-
-
-  // Run the decodeToken function on component mount
-  useEffect(() => {
-    decodeToken();
-  }, [decodeToken]);
 
   const sendMessage = async (message: string) => {
     if (!selectedConversation?.id) {

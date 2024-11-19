@@ -82,7 +82,9 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
 
   handleCall: async (receiverUser) => {
     const callerUser = userDetailsStore.getState().user;
+    console.log(callerUser,"this is callerUser in socketStore")
     const socket = userDetailsStore.getState().socket;
+    console.log(socket,"this is socket in socketStore")
     if (!callerUser || !socket) return;
     const stream = await get().getMediaStream();
     if (!stream) {

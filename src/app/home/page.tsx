@@ -14,7 +14,7 @@ const SearchParamsHandler = () =>{
 
   useEffect(() => {   
     const accessToken = searchParams.get('accessToken')
-    console.log("triggerd")
+    console.log("triggerd",accessToken)
     if (accessToken) {
       login(accessToken)
       router.replace('/home');

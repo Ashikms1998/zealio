@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from "next/navigation";
 import axios from "axios";
-const url = process.env.NEXT_PUBLIC_API_URL as string;
+const url = process.env.NEXT_PUBLIC_API_URL;
 
 const Navbar = () => {
   const router = useRouter()
@@ -25,6 +25,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const user = userDetailsStore.getState().user;
+    console.log(user,"this is user in navbar")
     setUserDetails(user);
   }, []);
 

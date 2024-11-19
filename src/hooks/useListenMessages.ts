@@ -6,6 +6,7 @@ import { userDetailsStore } from "@/zustand/userAuth";
 
 const useListenMessages = () => {
   const {socket} = userDetailsStore();
+  console.log(socket,"this is socket in useListenMessages")
   const { messages, setMessages } = useConversation();
 
   useEffect(() => {

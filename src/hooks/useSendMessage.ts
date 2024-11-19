@@ -7,7 +7,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { DecodedToken } from "../../types";
 import { userDetailsStore } from "@/zustand/userAuth";
-const url = process.env.NEXT_PUBLIC_API_URL as string;
+const url = process.env.NEXT_PUBLIC_API_URL;
 
 const useSendMessage = () => {
   const [loading, setLoading] = useState(false);
@@ -38,10 +38,12 @@ const useSendMessage = () => {
 
   useEffect(()=>{
     const tokeninLocalStorage = localStorage.getItem("accessToken")
+    console.log(tokeninLocalStorage,"<=This is localstorage item")
     const tokenInZustand = userDetailsStore((state)=>state.accessToken)
+    console.log(tokenInZustand,"<=This is the token in zustand")
     const token = Cookies.get("accessToken");
-    console.log(tokeninLocalStorage,"<=This is localstorage item",token,"<=This is token in cookies",tokenInZustand,"<=This is the token in zustand")
-  },[])
+    console.log(tokenInZustand,"<=This is the token in zustand")
+  },[userDetailsStore,localStorage,Cookies])
 
 
   // Run the decodeToken function on component mount

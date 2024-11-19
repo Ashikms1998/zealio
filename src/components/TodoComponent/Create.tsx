@@ -15,6 +15,7 @@ function Create({ updatedTask }: { updatedTask: (task: any) => void }) {
 
     useEffect(() => {
         const user = userDetailsStore.getState().user?.id;
+        console.log(user,"this is user in Create")
         if (user) {
             setUserId(user);
             } else {

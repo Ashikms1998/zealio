@@ -14,12 +14,15 @@ const SearchParamsHandler = () =>{
 
   useEffect(() => {   
     const accessToken = searchParams.get('accessToken')
+    if(!accessToken){
+      return
+    }
     console.log("triggerd",accessToken)
     if (accessToken) {
       login(accessToken)
       router.replace('/home');
     }
-  }, [searchParams,login,router]);
+  }, [searchParams]);
   return null
 }
 

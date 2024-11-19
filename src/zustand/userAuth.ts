@@ -35,14 +35,14 @@ export const userDetailsStore = create<AuthState>()(
       //   set({ socket });
       // },
       connectSocket: (userId: string) => {
-        console.log("before socket initialization")
+        console.log("before socket initialization",userId)
         const existingSocket = get().socket;
-        console.log("before socket initialization 2")
+        console.log("before socket initialization 2",userId)
         if (existingSocket) {
           console.log("Socket already exists");
           return;
         }
-        console.log("before socket initialization 3")
+        console.log("before socket initialization 3",userId)
         const newSocket = io(process.env.NEXT_PUBLIC_API_URL, {
           query: { userId },
         });
@@ -50,7 +50,7 @@ export const userDetailsStore = create<AuthState>()(
         //   query: { userId },
         // });
 
-        console.log("before socket initialization 4",newSocket)
+        console.log(userId,"before socket initialization 4",newSocket)
 
 
         newSocket.on("connect", () => {

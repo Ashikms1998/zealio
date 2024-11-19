@@ -23,11 +23,13 @@ const Navbar = () => {
   }
   const [userDetails, setUserDetails] = useState<userTs | null | undefined>(undefined);
 
+  const user = userDetailsStore((state) => state.user);
+
   useEffect(() => {
     const user = userDetailsStore.getState().user;
     console.log(user,"this is user in navbar")
     setUserDetails(user);
-  }, []);
+  }, [user]);
 
 
 

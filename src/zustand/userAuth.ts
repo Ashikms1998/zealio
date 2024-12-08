@@ -94,7 +94,7 @@ export const userDetailsStore = create<AuthState>()(
           //   get().connectSocket(userData.id);
           // }
 
-          get().connectSocket(userData.id);
+          // get().connectSocket(userData.id);
         } catch (error) {
           console.log("Failed to fetch user data:", error);
           set({

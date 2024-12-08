@@ -12,31 +12,28 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 const url = process.env.NEXT_PUBLIC_API_URL;
 
+interface userTs {
+  id: string,
+  firstName: string,
+  lastName: string
+
+}
 const Navbar = () => {
   const router = useRouter()
-  
-  interface userTs {
-    id: string,
-    firstName: string,
-    lastName: string
 
-  }
-  const [userDetails, setUserDetails] = useState<userTs | null | undefined>(undefined);
+  const [userDetails, setUserDetails] = useState<userTs | null>(null);
 
-  const user = userDetailsStore((state) => state.user);
+  const { user } = userDetailsStore();
 
   useEffect(() => {
-    const user = userDetailsStore.getState().user;
-    console.log(user,"this is user in navbar")
     setUserDetails(user);
-  }, [user]);
+  }, []);
 
 
 
   const handleLogout = async () => {
     try {
       const res = await axios.post(`${url}/auth/logout`, {}, { withCredentials: true })
-      console.log(res)
       if (res.status === 200) {
         localStorage.removeItem('auth-storage')
         localStorage.removeItem('accessToken')
@@ -52,9 +49,10 @@ const Navbar = () => {
     }
   }
 
+
   return (
-    <header className="w-full absolute z-10">
-      <nav className="max-w-[1440px] mx-auto flex justify-between items-center sm:px-16 px-6 py-4">
+    <nav className="w-full absolute z-10">
+      <div className="max-w-[1440px] mx-auto flex justify-between items-center sm:px-16 px-6 py-4">
         <Link href="/" className="flex justify-center items-center">
           <Image src="/Zealio_-blkBg-removebg-preview.png" alt="Zealio logo" width={150} height={1} className="object-contain" />
         </Link>
@@ -109,8 +107,8 @@ const Navbar = () => {
           </div>
         )
         }
-      </nav>
-    </header>
+      </div>
+    </nav>
   );
 };
 

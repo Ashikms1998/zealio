@@ -13,7 +13,7 @@ const convertToIST = (dateString: string): string => {
 
 const Message = ({message}:{message:Imessages}) =>  {
 const user = userDetailsStore((state)=>state.user?.id)
-console.log(user,"this is user in Message")
+// console.log(user,"this is user in Message")
 const checkingMe = message.senderId != user
 const bubbleBgColor = checkingMe ? 'bg-blue-500' : "";
 // const shakeClass = message.shouldShake ? "shake" : "";

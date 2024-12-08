@@ -1,5 +1,6 @@
 import Videocall from "@/components/VideoCall";
 import CallNotification from "@/components/CallNotification";
+import SocketInitializer from "@/components/SocketInitializer";
 
 export default function HomeLayout({
   children,
@@ -8,9 +9,10 @@ export default function HomeLayout({
 }>) {
   return (
     <html lang="en">
-        {children}
-        <Videocall/>
-        <CallNotification/>
+      <SocketInitializer />
+      {children}
+      <Videocall />
+      <CallNotification />
     </html>
   );
 }

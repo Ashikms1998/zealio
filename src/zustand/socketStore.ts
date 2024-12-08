@@ -14,13 +14,13 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
 interface iSocketState {
   socket: Socket | null;
   isSocketConnected: boolean;
-  initializeSocket: (socket:Socket) => void;
+  initializeSocket: (newSocket: Socket) => void;
   disconnectSocket: () => void;
   ongoingCall: OnGoingCall | null;
   localStream: MediaStream | null;
   peer: PeerData | null;
 
-  handleCall: (receiverUser: User) => void;
+  handleCall: (receiverUser: User,socket:Socket| null) => void;
 
   handleIncomingCall: (participants: Participants) => void;
 
@@ -80,10 +80,10 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
     }
   },
 
-  handleCall: async (receiverUser) => {
+  handleCall: async (receiverUser,socket) => {
     const callerUser = userDetailsStore.getState().user;
     console.log(callerUser,"this is callerUser in socketStore")
-    const socket = userDetailsStore.getState().socket;
+    // const socket = userDetailsStore.getState().socket;
     console.log(socket,"this is socket in socketStore")
     if (!callerUser || !socket) return;
     const stream = await get().getMediaStream();
@@ -195,7 +195,7 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
       console.error("creatPeer connection error:", err);
   })
 
-    // peer.on("close", () => get().handleHangup());
+    peer.on("close", () => get().handleHangup());
 
     // const rtcPeerConnection: RTCPeerConnection = (peer as any)._pc;
     // rtcPeerConnection.oniceconnectionstatechange = async () => {
@@ -206,7 +206,6 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
     //     get().handleHangup();
     //   }
     // };
-
     return peer;
   },
 
@@ -222,6 +221,7 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
       peer.peerConnection?.signal(data.sdp);
       return;
     }
+    console.log("create peer with loclsteam2️⃣ ",localStream);
     const newPeer = get().createPeer(localStream, true);
     console.log("create new pear user2️⃣ ",newPeer);
 
@@ -297,81 +297,46 @@ export const useSocketStore = create<iSocketState>((set, get) => ({
     });
   },
 
-  initializeSocket: (newSocket:Socket) => {
+  initializeSocket: (newSocket: Socket) => {
     const authStore = userDetailsStore.getState();
-    console.log("1",authStore,"userDetailsStore",userDetailsStore);
     const user = authStore.user;
-    const userId = authStore.user?.id
-    console.log("2",user);
-    // const socket = userDetailsStore.getState();
-    console.log("3",userId);
-    
-    // const newSocket = io(process.env.NEXT_PUBLIC_API_URL, {
-    //   query: { userId },
-    // });
-        // const newSocket = userDetailsStore((state)=>state.socket)
-    console.log(newSocket,"This is new socket");
-
-    set({socket:newSocket})
-    // const newSocket = socket.socket
-    console.log("newSocket",newSocket,"auth store",authStore);
-    if (!user || !user?.id) {
-      console.error("User is not properly authenticated");
+    if (!user || !user.id) {
+      console.error("User not authenticated");
       return;
     }
 
-    //This is for consoling nothing else
-    newSocket?.on("connect", () => {
-      console.log("Socket connected!");
-    });
-    newSocket?.onAny((event, ...args) => {
-      console.log('Received event:', event, args);
-    });
-    newSocket?.on("error", (err) => {
-      console.error('Socket error:', err);
-    });
+    set({ socket: newSocket });
 
+    // On socket connection
+    // newSocket.on("connect", () => {
+    //   console.log("Socket connected!", newSocket.id);
+    //   newSocket.emit("user_connected", user.id); // Emit user connection event to backend
+    // });
 
-    const onConnect = () => {
-      set({ isSocketConnected: true });
-      console.log("user connected", user.id);
-      newSocket?.emit("user_connected", user?.id);
-    };
-
-    const onDisconnect = () => {
-      set({ isSocketConnected: false });
-    };
-
-    newSocket?.on("incomingcall", (callData) => {
-      console.log("Incoming call received👍:", callData);
+    // Handle incoming call
+    newSocket.on("incomingcall", (callData) => {
+      console.log("Incoming call:", callData);
       get().handleIncomingCall(callData);
     });
 
-    newSocket?.on("webrtcSignal", (data) => {
-      console.log("This is data",data)
+    // Handle WebRTC signaling
+    newSocket.on("webrtcSignal", (data) => {
+      console.log("WebRTC signal received:", data);
       get().completePeerConnection(data);
     });
 
-    newSocket?.on("callCancelled", (data) => {
+    // Handle call cancellation
+    newSocket.on("callCancelled", (data) => {
+      console.log("Call cancelled:", data.message);
       get().handleCallCancelled(data.message);
     });
 
-    newSocket?.on("callEnded", (data) => {
-      get().handleCallCancelled(data.message);
+    // On disconnect
+    newSocket.on("disconnect", () => {
+      console.log("Socket disconnected.");
+      set({ isSocketConnected: false });
     });
-
-    newSocket?.on("connect", onConnect);
-    newSocket?.on("disconnect", onDisconnect);
-
-    return () => {
-      newSocket?.off("connect", onConnect);
-      newSocket?.off("disconnect", onDisconnect);
-      newSocket?.off("incomingcall");
-      newSocket?.off("webrtcSignal");
-      newSocket?.disconnect();
-    };
   },
-
   disconnectSocket: () => {
     const { socket } = get();
     if (socket) {

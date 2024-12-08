@@ -47,8 +47,8 @@ const Videocall = () => {
 
   if (!ongoingCall) {
     return null;
-  }else{
-    console.log("This is the error",peer, peer?.stream);
+  } else {
+    console.log("This is the error", peer, peer?.stream);
   }
 
   return (

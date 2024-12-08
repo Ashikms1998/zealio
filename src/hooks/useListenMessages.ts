@@ -2,10 +2,11 @@
 import { useEffect } from "react";
 import useConversation from "@/zustand/useConversation";
 import Notificationding from "../../public/songs/Notificationding.mp3";
-import { userDetailsStore } from "@/zustand/userAuth";
+// import { userDetailsStore } from "@/zustand/userAuth";
+import { useSocketStore } from "@/zustand/socketStore";
 
 const useListenMessages = () => {
-  const {socket} = userDetailsStore();
+  const {socket} = useSocketStore();
   console.log(socket,"this is socket in useListenMessages")
   const { messages, setMessages } = useConversation();
 

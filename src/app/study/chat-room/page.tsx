@@ -21,9 +21,9 @@ const RoomCodeForm = () => {
 
                 <section className="flex flex-col md:flex-row items-center justify-between py-16 px-4 md:px-16">
                     <div className="md:w-1/2 space-y-4">
-                        <h2 className="text-4xl font-bold">Join the Global Room or <br/> Create Your Own Space</h2>
+                        <h2 className="text-4xl font-bold">Join the Global Room or <br /> Create Your Own Space</h2>
                         <p className="text-gray-700">
-                        Connect with everyone in the Global Room using <span className='font-bold'>Room ID 123</span>,<br/> or create a personalized room with a unique ID that you can share with friends for a private experience. </p>
+                            Connect with everyone in the Global Room using <span className='font-bold'>Room ID 123</span>,<br /> or create a personalized room with a unique ID that you can share with friends for a private experience. </p>
                     </div>
 
                     <div className="mt-8 md:mt-0 md:w-1/2 flex items-center justify-center relative">

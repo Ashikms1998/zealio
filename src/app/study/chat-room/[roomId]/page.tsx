@@ -15,8 +15,8 @@ const Room = () => {
                 return;
             }
 
-            const appID = 1135378490;
-            const serverSecret = "c9015afdecb2016e108f29434f1e23d9";
+            const appID = 1112486787;
+            const serverSecret = "2c5b27f49554c3ff2ed0efd1d1b499b9";
             const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
                 appID,
                 serverSecret,
